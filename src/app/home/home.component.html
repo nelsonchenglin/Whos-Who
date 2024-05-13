@@ -1,6 +1,9 @@
 <div *ngIf="!authLoading && !configLoading">
   Genre:
-  <select [(ngModel)]="selectedGenre" (ngModelChange)="performGenreSearch(selectedGenre)">
+  <select
+    [(ngModel)]="selectedGenre"
+    (ngModelChange)="performGenreSearch(selectedGenre)"
+  >
     <option [value]=""></option>
     <option *ngFor="let genre of genres" [value]="genre">{{ genre }}</option>
   </select>
@@ -12,7 +15,11 @@
     <option value="artist">Artist</option>
     <option value="album">Album</option>
   </select>
-  <input type="text" [(ngModel)]="searchQuery" placeholder="Enter search query">
+  <input
+    type="text"
+    [(ngModel)]="searchQuery"
+    placeholder="Enter search query"
+  />
   <button (click)="performSearch()">Search</button>
   <button (click)="performGenreSearch(searchQuery)">Search by Genre</button>
 </div>
@@ -48,7 +55,8 @@
   <h3>Tracks</h3>
   <ul>
     <li *ngFor="let track of tracks">
-      {{ track.name }} - <a href="{{ track.preview_url }}" target="_blank">Preview</a>
+      {{ track.name }} -
+      <a href="{{ track.preview_url }}" target="_blank">Preview</a>
     </li>
   </ul>
 </div>

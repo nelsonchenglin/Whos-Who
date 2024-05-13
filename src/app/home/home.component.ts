@@ -33,11 +33,13 @@ interface SpotifyTrack {
   styleUrls: ["./home.component.css"],
 })
 export class HomeComponent implements OnInit {
+
   genres: string[] = ["House", "Alternative", "J-Rock", "R&B"];
   selectedGenre: string = "";
   albumQuery: string = "";  
   artistQuery: string = "";  
   genreQuery: string = "";  
+
   authLoading: boolean = false;
   configLoading: boolean = false;
   token: string = "";
@@ -62,6 +64,7 @@ export class HomeComponent implements OnInit {
         return;
       }
     }
+
     console.log("Sending request to AWS endpoint");
     request(AUTH_ENDPOINT).then(({ access_token, expires_in }) => {
       const newToken = {
@@ -98,7 +101,9 @@ export class HomeComponent implements OnInit {
 
   loadGenres = async (t: any) => {
     this.configLoading = true;
+
     this.genres = ["rock", "rap", "pop", "country", "hip-hop", "jazz", "alternative", "j-pop", "k-pop", "emo"];
+
     this.configLoading = false;
   };
 
@@ -106,12 +111,15 @@ export class HomeComponent implements OnInit {
     this.selectedGenre = selectedGenre;
     console.log("is there selectedGenre value", this.selectedGenre);
     console.log(TOKEN_KEY);
-  };
+  }
 
+  // Search by Genre
   searchByGenre = async (genre: string) => {
     const response = await fetchFromSpotify({
       token: this.token,
       endpoint: "search",
+   
+
       params: { q: genre, type: "playlist", limit: 20 },
     });
     console.log("Genre search result:", response);
@@ -153,6 +161,10 @@ export class HomeComponent implements OnInit {
       return [];
     }
 
+  };
+
+  // Search by Album Name
+  searchByAlbumName = async (albumName: string) => {
     const response = await fetchFromSpotify({
       token: this.token,
       endpoint: "search",
@@ -263,5 +275,6 @@ export class HomeComponent implements OnInit {
 
   selectRandomAlbums = (albums: any[], count: number): any[] => {
     return this.shuffleArray(albums).slice(0, count);
+
   };
 }

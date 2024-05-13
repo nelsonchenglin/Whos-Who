@@ -3,7 +3,8 @@ import fetchFromSpotify, { request } from "../../services/api";
 
 const AUTH_ENDPOINT =
   "https://nuod0t2zoe.execute-api.us-east-2.amazonaws.com/FT-Classroom/spotify-auth-token";
-const TOKEN_KEY = "whos-who-access-token";
+const TOKEN_KEY =
+  "BQCJR8wkc_NgqBbgf2hHhYzJrJwq6MNoeT-sLzW9R4GpolNyV_B0R7AIOfCe94cTwW4CB8VdO_e6PSEDNf6f_aQe-lhd1C06EC0yTChyHJ42KNZ45do";
 
 @Component({
   selector: "app-home",
@@ -15,13 +16,12 @@ export class HomeComponent implements OnInit {
 
   genres: String[] = ["House", "Alternative", "J-Rock", "R&B"];
   selectedGenre: String = "";
-  albumQuery: string = "";  // Holds the album name input what ngModel is binding to 
-  artistQuery: string = "";  // Holds the artist name input: what ngModel is binding to 
-  genreQuery: string = "";  // Holds the genre input for searching playlists
+  albumQuery: string = ""; // Holds the album name input what ngModel is binding to
+  artistQuery: string = ""; // Holds the artist name input: what ngModel is binding to
+  genreQuery: string = ""; // Holds the genre input for searching playlists
   authLoading: boolean = false;
   configLoading: boolean = false;
   token: String = "";
-
 
   ngOnInit(): void {
     this.authLoading = true;
@@ -36,6 +36,7 @@ export class HomeComponent implements OnInit {
         return;
       }
     }
+
     console.log("Sending request to AWS endpoint");
     request(AUTH_ENDPOINT).then(({ access_token, expires_in }) => {
       const newToken = {
@@ -62,7 +63,7 @@ export class HomeComponent implements OnInit {
     // });
     // console.log(response);
     // #################################################################################
-    
+
     this.genres = [
       "rock",
       "rap",
@@ -73,8 +74,8 @@ export class HomeComponent implements OnInit {
       "alternative",
       "j-pop",
       "k-pop",
-      "emo"
-    ]
+      "emo",
+    ];
     this.configLoading = false;
   };
 
@@ -85,50 +86,44 @@ export class HomeComponent implements OnInit {
   }
 
   // Search by Genre
-searchByGenre = async (genre: string) => {
-  const response = await fetchFromSpotify({
-    token: this.token,
-    endpoint: "search",
-    params: {
-      q: genre,
-      type: "playlist",  // Assuming you want playlists for genres
-      limit: 20,
-    },
-  });
-  console.log("Genre search result:", response);
-};
+  searchByGenre = async (genre: string) => {
+    const response = await fetchFromSpotify({
+      token: this.token,
+      endpoint: "search",
+      params: {
+        q: genre,
+        type: "playlist", // Assuming you want playlists for genres
+        limit: 20,
+      },
+    });
+    console.log("Genre search result:", response);
+  };
 
-// Search by Album Name
-searchByAlbumName = async (albumName: string) => {
-  const response = await fetchFromSpotify({
-    token: this.token,
-    endpoint: "search",
-    params: {
-      q: `album:'${albumName}'`,
-      type: "album",
-      limit: 20,
-    },
-  });
-  console.log("Album search result:", response);
-};
+  // Search by Album Name
+  searchByAlbumName = async (albumName: string) => {
+    const response = await fetchFromSpotify({
+      token: this.token,
+      endpoint: "search",
+      params: {
+        q: `album:'${albumName}'`,
+        type: "album",
+        limit: 20,
+      },
+    });
+    console.log("Album search result:", response);
+  };
 
-// Search by Artist Name
-searchByArtist = async (artistName: string) => {
-  const response = await fetchFromSpotify({
-    token: this.token,
-    endpoint: "search",
-    params: {
-      q: `artist:'${artistName}'`,
-      type: "artist",
-      limit: 20,
-    },
-  });
-  console.log("Artist search result:", response);
-};
+  // Search by Artist Name
+  searchByArtist = async (artistName: string) => {
+    const response = await fetchFromSpotify({
+      token: this.token,
+      endpoint: "search",
+      params: {
+        q: `artist:'${artistName}'`,
+        type: "artist",
+        limit: 20,
+      },
+    });
+    console.log("Artist search result:", response);
+  };
 }
-
-
-
-
-
-

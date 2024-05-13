@@ -11,5 +11,6 @@ export class LeaderboardComponent implements OnInit {
   ngOnInit(): void {}
 
   @Input() score: number = 0;
+
   leaderboard: object = {};
 }

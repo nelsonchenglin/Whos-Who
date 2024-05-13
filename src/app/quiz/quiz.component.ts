@@ -1,4 +1,7 @@
 import { Component, Input, OnInit } from "@angular/core";
+import { DataService } from "../data.service";
+import { Router } from "@angular/router";
+import { HttpClient } from "@angular/common/http";
 
 @Component({
   selector: "app-quiz",
@@ -6,7 +9,11 @@ import { Component, Input, OnInit } from "@angular/core";
   styleUrls: ["./quiz.component.css"],
 })
 export class QuizComponent implements OnInit {
-  constructor() {}
+  constructor(
+    private http: HttpClient,
+    private service: DataService,
+    private router: Router
+  ) {}
 
   @Input() artistName: string = "";
   @Input() genreSelected: string = "";

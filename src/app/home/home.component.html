@@ -33,6 +33,7 @@
   <div *ngFor="let question of questions; let i = index">
     <p>{{ question.text }}</p>
     <button (click)="playSnippet(question.preview)">Play Snippet</button>
+    <button (click)="pauseSnippet()">Pause Snippet</button>
     <ul>
       <li *ngFor="let option of question.options">
         {{ option.name }}

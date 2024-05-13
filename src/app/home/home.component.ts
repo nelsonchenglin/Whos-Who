@@ -1,9 +1,12 @@
 import { Component, OnInit } from "@angular/core";
 import fetchFromSpotify, { request } from "../../services/api";
 import { Router, NavigationExtras } from "@angular/router";
+import { environment } from "src/environments/environment";
 
-const AUTH_ENDPOINT = "https://nuod0t2zoe.execute-api.us-east-2.amazonaws.com/FT-Classroom/spotify-auth-token";
+const AUTH_ENDPOINT = "https://accounts.spotify.com/api/token";
 const TOKEN_KEY = "whos-who-access-token";
+const CLIENT_ID = environment.SPOTIFY_CLIENT_ID;
+const CLIENT_SECRET = environment.SPOTIFY_CLIENT_SECRET;
 
 interface Artist {
   name: string;
@@ -288,8 +291,10 @@ export class HomeComponent implements OnInit {
   };
 
   createQuestions = () => {
+    console.log(`Generating ${this.numQuestions} questions with ${this.numChoices} choices each from ${this.tracks.length} tracks`);
     if (this.tracks.length < this.numQuestions) {
       this.errorMessage = "Not enough songs to create questions. Please select a different genre.";
+      console.error(this.errorMessage);
       return;
     }
 
@@ -303,20 +308,31 @@ export class HomeComponent implements OnInit {
       }));
 
       this.questions.push({
-        text: "Who is the artist of this track?",
+        text: "Which track is playing?",
         options,
         correctAnswer: correctTrack.name,
         preview: correctTrack.preview_url
       });
+      console.log(`Question ${i + 1}:`, this.questions[i]);
     }
   };
 
   playSnippet(previewUrl: string) {
+    if (!previewUrl) {
+      console.warn("No preview URL available for this track.");
+      return;
+    }
     if (this.currentSnippet) {
       this.currentSnippet.pause();
       this.currentSnippet = null;
     }
     this.currentSnippet = new Audio(previewUrl);
     this.currentSnippet.play();
+  }
+
+  pauseSnippet() {
+    if (this.currentSnippet) {
+      this.currentSnippet.pause();
+    }
   }
 }

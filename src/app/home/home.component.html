@@ -1,28 +1,28 @@
-<div *ngIf="authLoading || configLoading">Loading...</div>
 <div *ngIf="!authLoading && !configLoading">
   Genre:
-  <select [(ngModel)]="selectedGenre" (ngModelChange)="setGenre($event)">
+  <select [(ngModel)]="selectedGenre" (ngModelChange)="performGenreSearch(selectedGenre)">
     <option [value]=""></option>
     <option *ngFor="let genre of genres" [value]="genre">{{ genre }}</option>
   </select>
+</div>
 
-  <div>
-    <select [(ngModel)]="searchType">
-      <option value="genre">Genre</option>
-      <option value="artist">Artist</option>
-      <option value="album">Album</option>
-    </select>
-    <input type="text" [(ngModel)]="searchQuery" placeholder="Enter search query">
-    <button (click)="performSearch()">Search</button>
-  </div>
+<div>
+  <select [(ngModel)]="searchType">
+    <option value="genre">Genre</option>
+    <option value="artist">Artist</option>
+    <option value="album">Album</option>
+  </select>
+  <input type="text" [(ngModel)]="searchQuery" placeholder="Enter search query">
+  <button (click)="performSearch()">Search</button>
+  <button (click)="performGenreSearch(searchQuery)">Search by Genre</button>
+</div>
 
-  <!-- Display tracks -->
-  <div *ngIf="tracks.length > 0">
-    <h3>Tracks</h3>
-    <ul>
-      <li *ngFor="let track of tracks">
-        {{ track.name }} - <a href="{{ track.preview_url }}" target="_blank">Preview</a>
-      </li>
-    </ul>
-  </div>
+<!-- Display tracks -->
+<div *ngIf="tracks.length > 0">
+  <h3>Tracks</h3>
+  <ul>
+    <li *ngFor="let track of tracks">
+      {{ track.name }} - <a href="{{ track.preview_url }}" target="_blank">Preview</a>
+    </li>
+  </ul>
 </div>

@@ -1,7 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import fetchFromSpotify, { request } from "../../services/api";
 
-
 const AUTH_ENDPOINT = "https://nuod0t2zoe.execute-api.us-east-2.amazonaws.com/FT-Classroom/spotify-auth-token";
 const TOKEN_KEY = "whos-who-access-token";
 
@@ -34,16 +33,16 @@ interface SpotifyTrack {
   styleUrls: ["./home.component.css"],
 })
 export class HomeComponent implements OnInit {
-  genres: String[] = ["House", "Alternative", "J-Rock", "R&B"];
-  selectedGenre: String = "";
+  genres: string[] = ["House", "Alternative", "J-Rock", "R&B"];
+  selectedGenre: string = "";
   albumQuery: string = "";  
   artistQuery: string = "";  
   genreQuery: string = "";  
   authLoading: boolean = false;
   configLoading: boolean = false;
-  token: String = "";
+  token: string = "";
   artistId: string = '';  
-  albumId: String = '';
+  albumId: string = '';
   searchType: string = 'genre';  
   searchQuery: string = '';  
   tracks: Track[] = [];  
@@ -105,7 +104,7 @@ export class HomeComponent implements OnInit {
 
   setGenre = (selectedGenre: any) => {
     this.selectedGenre = selectedGenre;
-    console.log(this.selectedGenre);
+    console.log("is there selectedGenre value", this.selectedGenre);
     console.log(TOKEN_KEY);
   };
 
@@ -116,6 +115,84 @@ export class HomeComponent implements OnInit {
       params: { q: genre, type: "playlist", limit: 20 },
     });
     console.log("Genre search result:", response);
+  };
+
+  performGenreSearch = async (selectedGenre: string) => {
+    if (!selectedGenre || !selectedGenre.trim()) {
+      console.warn("Search query is empty.");
+      return;  // Changed from return [] to return;
+    }
+
+    console.log("Searching playlists for genre:", selectedGenre); // Verify the incoming genre
+
+    const response = await fetchFromSpotify({
+      token: this.token,
+      endpoint: "search",
+      params: {
+        q: selectedGenre,
+        type: "playlist",
+        limit: 20  // Fetch a reasonable number of playlists
+      },
+    });
+
+    if (!response || !response.playlists || !response.playlists.items) {
+      console.error("Failed to fetch playlists or no playlists available.");
+      return;  // Changed from return [] to return;
+    }
+
+    console.log("Playlist search result:", response);
+    const selectedPlaylist = this.selectRandomPlaylist(response.playlists.items);
+    const tracks = await this.fetchTracksFromPlaylist(selectedPlaylist.id);
+    this.tracks = this.getRandomTracks(tracks);
+    console.log("Tracks fetched:", this.tracks);
+  };
+
+  searchPlaylistsByGenre = async (selectedGenre: string) => {
+    if (!selectedGenre.trim()) {
+      console.warn("Search query is empty.");
+      return [];
+    }
+
+    const response = await fetchFromSpotify({
+      token: this.token,
+      endpoint: "search",
+      params: {
+        q: selectedGenre,
+        type: "playlist",
+        limit: 20  // Fetch a reasonable number of playlists
+      },
+    });
+
+    if (!response || !response.playlists || !response.playlists.items) {
+      console.error("Failed to fetch playlists or no playlists available.");
+      return [];
+    }
+
+    console.log("Playlist search result:", response);
+    return response.playlists.items;
+  };
+
+  selectRandomPlaylist = (playlists: any[]): any => {
+    const randomIndex = Math.floor(Math.random() * playlists.length);
+    return playlists[randomIndex];
+  };
+
+  fetchTracksFromPlaylist = async (playlistId: string) => {
+    const response = await fetchFromSpotify({
+      token: this.token,
+      endpoint: `playlists/${playlistId}/tracks`,
+      params: { limit: 50 } // Adjust based on the number of tracks you expect
+    });
+
+    return response.items.map((item: any) => ({
+      id: item.track.id,
+      name: item.track.name,
+      preview_url: item.track.preview_url
+    }));
+  };
+
+  getRandomTracks = (tracks: any[], count: number = 10): any[] => {
+    return this.shuffleArray(tracks).slice(0, count);
   };
 
   searchByAlbumName = async (albumName: string) => {
@@ -171,7 +248,6 @@ export class HomeComponent implements OnInit {
         name: item.name,
         preview_url: item.preview_url,
       })));
-   
     }
     tracks = this.shuffleArray(tracks).slice(0, 10);
     this.tracks = tracks;
@@ -185,9 +261,7 @@ export class HomeComponent implements OnInit {
     return array;
   };
 
-
   selectRandomAlbums = (albums: any[], count: number): any[] => {
     return this.shuffleArray(albums).slice(0, count);
   };
 }
-

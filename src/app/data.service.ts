@@ -13,13 +13,7 @@ export class DataService {
   selectedGenre: string = "";
   albumQuery: string = "";
   artistQuery: string = "";
-  genreQuery: string = "";
-  authLoading: boolean = false;
-  configLoading: boolean = false;
   token: string = "";
   artistId: string = "";
   albumId: string = "";
-  searchType: string = "genre";
-  searchQuery: string = "";
-  tracks: Track[] = [];
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import fetchFromSpotify, { request } from "../../services/api";
+import { Router, NavigationExtras } from "@angular/router";
 
 const AUTH_ENDPOINT = "https://nuod0t2zoe.execute-api.us-east-2.amazonaws.com/FT-Classroom/spotify-auth-token";
 const TOKEN_KEY = "whos-who-access-token";
@@ -27,6 +28,18 @@ interface SpotifyTrack {
   preview_url: string;
 }
 
+interface Option {
+  name: string;
+  img: string;
+}
+
+interface Question {
+  text: string;
+  options: Option[];
+  correctAnswer: string;
+  preview: string;
+}
+
 @Component({
   selector: "app-home",
   templateUrl: "./home.component.html",
@@ -46,8 +59,15 @@ export class HomeComponent implements OnInit {
   searchType: string = 'genre';  
   searchQuery: string = '';  
   tracks: Track[] = [];  
+  questions: Question[] = [];
+  currentQuestionIndex: number = 0;
+  numChoices: number = 4; // default number of choices
+  numQuestions: number = 1; // default number of questions
+  isPlayingSnippet: boolean = false;
+  currentSnippet: HTMLAudioElement | null = null;
+  errorMessage: string | null = null;
 
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
     this.authLoading = true;
@@ -144,6 +164,7 @@ export class HomeComponent implements OnInit {
     const selectedPlaylist = this.selectRandomPlaylist(response.playlists.items);
     const tracks = await this.fetchTracksFromPlaylist(selectedPlaylist.id);
     this.tracks = this.getRandomTracks(tracks);
+    this.createQuestions();
     console.log("Tracks fetched:", this.tracks);
   };
 
@@ -251,6 +272,7 @@ export class HomeComponent implements OnInit {
     }
     tracks = this.shuffleArray(tracks).slice(0, 10);
     this.tracks = tracks;
+    this.createQuestions();
   };
 
   shuffleArray = (array: any[]): any[] => {
@@ -264,4 +286,37 @@ export class HomeComponent implements OnInit {
   selectRandomAlbums = (albums: any[], count: number): any[] => {
     return this.shuffleArray(albums).slice(0, count);
   };
+
+  createQuestions = () => {
+    if (this.tracks.length < this.numQuestions) {
+      this.errorMessage = "Not enough songs to create questions. Please select a different genre.";
+      return;
+    }
+
+    this.questions = [];
+    for (let i = 0; i < this.numQuestions; i++) {
+      const randomTracks = this.shuffleArray(this.tracks).slice(0, this.numChoices);
+      const correctTrack = randomTracks[Math.floor(Math.random() * randomTracks.length)];
+      const options: Option[] = randomTracks.map(track => ({
+        name: track.name,
+        img: track.img
+      }));
+
+      this.questions.push({
+        text: "Who is the artist of this track?",
+        options,
+        correctAnswer: correctTrack.name,
+        preview: correctTrack.preview_url
+      });
+    }
+  };
+
+  playSnippet(previewUrl: string) {
+    if (this.currentSnippet) {
+      this.currentSnippet.pause();
+      this.currentSnippet = null;
+    }
+    this.currentSnippet = new Audio(previewUrl);
+    this.currentSnippet.play();
+  }
 }

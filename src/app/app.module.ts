@@ -7,6 +7,7 @@ import { AppComponent } from "./app.component";
 import { HomeComponent } from "./home/home.component";
 import { QuizComponent } from "./quiz/quiz.component";
 import { LeaderboardComponent } from "./leaderboard/leaderboard.component";
+import { HeaderComponent } from './header/header.component';
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
@@ -15,7 +16,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, QuizComponent],
+  declarations: [AppComponent, HomeComponent, QuizComponent, HeaderComponent],
   imports: [BrowserModule, FormsModule, RouterModule.forRoot(routes)],
   providers: [],
   bootstrap: [AppComponent],

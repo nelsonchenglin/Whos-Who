@@ -1,4 +1,3 @@
-
 <div *ngIf="authLoading || configLoading">Loading...</div>
 <div *ngIf="!authLoading && !configLoading">
   Genre:
@@ -10,31 +9,22 @@
   </select>
 
   <!-- Add input fields for album and artist searches -->
-  <div>
+  <!-- Maybe add this feature later -->
+  <!-- <div>
     <label for="album-search">Album Name:</label>
     <input type="text" id="album-search" [(ngModel)]="albumQuery">
     <button (click)="searchByAlbumName(albumQuery)">Search Album</button>
-  </div>
+  </div> -->
 
   <div>
     <label for="artist-search">Artist Name:</label>
-    <input type="text" id="artist-search" [(ngModel)]="artistQuery">
+    <input type="text" id="artist-search" [(ngModel)]="artistQuery" />
     <button (click)="searchByArtist(artistQuery)">Search Artist</button>
   </div>
 </div>
 
 <!-- Search Functions: When you click the search button associated with each input field, it triggers 
   a function call (searchByAlbumName(albumQuery) or searchByArtist(artistQuery)) that uses the current value of albumQuery or artistQuery to make an API request. -->
-
-
-
-
-
-
-
-
-
-
 
 <!-- <div *ngIf="authLoading || configLoading">Loading...</div>
 <div *ngIf="!authLoading && !configLoading">
@@ -65,4 +55,4 @@
       <button (click)="searchByArtist(artistQuery)">Search Artist</button>
     </div>
 
-</div> --> 
+</div> -->

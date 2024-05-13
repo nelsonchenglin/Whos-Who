@@ -10,8 +10,8 @@ import { LeaderboardComponent } from "./leaderboard/leaderboard.component";
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
-  { path: "/quizGame", component: QuizComponent },
-  { path: "/leaderboard", component: LeaderboardComponent },
+  { path: "quizgame", component: QuizComponent },
+  { path: "leaderboard", component: LeaderboardComponent },
 ];
 
 @NgModule({

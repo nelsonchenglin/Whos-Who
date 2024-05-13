@@ -15,9 +15,13 @@ export class HomeComponent implements OnInit {
 
   genres: String[] = ["House", "Alternative", "J-Rock", "R&B"];
   selectedGenre: String = "";
+  albumQuery: string = "";  // Holds the album name input what ngModel is binding to 
+  artistQuery: string = "";  // Holds the artist name input: what ngModel is binding to 
+  genreQuery: string = "";  // Holds the genre input for searching playlists
   authLoading: boolean = false;
   configLoading: boolean = false;
   token: String = "";
+
 
   ngOnInit(): void {
     this.authLoading = true;
@@ -79,4 +83,52 @@ export class HomeComponent implements OnInit {
     console.log(this.selectedGenre);
     console.log(TOKEN_KEY);
   }
+
+  // Search by Genre
+searchByGenre = async (genre: string) => {
+  const response = await fetchFromSpotify({
+    token: this.token,
+    endpoint: "search",
+    params: {
+      q: genre,
+      type: "playlist",  // Assuming you want playlists for genres
+      limit: 20,
+    },
+  });
+  console.log("Genre search result:", response);
+};
+
+// Search by Album Name
+searchByAlbumName = async (albumName: string) => {
+  const response = await fetchFromSpotify({
+    token: this.token,
+    endpoint: "search",
+    params: {
+      q: `album:'${albumName}'`,
+      type: "album",
+      limit: 20,
+    },
+  });
+  console.log("Album search result:", response);
+};
+
+// Search by Artist Name
+searchByArtist = async (artistName: string) => {
+  const response = await fetchFromSpotify({
+    token: this.token,
+    endpoint: "search",
+    params: {
+      q: `artist:'${artistName}'`,
+      type: "artist",
+      limit: 20,
+    },
+  });
+  console.log("Artist search result:", response);
+};
 }
+
+
+
+
+
+

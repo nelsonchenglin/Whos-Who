@@ -1,33 +1,33 @@
 <div *ngIf="genres.length > 0">
-    <label for="genre">Genre:</label>
-    <select id="genre" [(ngModel)]="selectedGenre">
-      <option value=""></option>
-      <option *ngFor="let genre of genres" [value]="genre.id">{{ genre.name }}</option>
-    </select>
-  </div>
-  
-  <div>
-    <label for="searchType">Search Type:</label>
-    <select id="searchType" [(ngModel)]="searchType">
-      <option value="genre">Genre</option>
-      <option value="artist">Artist</option>
-      <option value="album">Album</option>
-    </select>
-  </div>
-  
-  <div>
-    <label for="searchQuery">Search Query:</label>
-    <input id="searchQuery" type="text" [(ngModel)]="searchQuery">
-  </div>
-  
-  <div>
-    <label for="numChoices">Number of Choices per Question:</label>
-    <input id="numChoices" type="number" [(ngModel)]="numChoices" min="2" max="10">
-  </div>
-  
-  <div>
-    <label for="numQuestions">Number of Questions:</label>
-    <input id="numQuestions" type="number" [(ngModel)]="numQuestions" min="2" max="10">
-  </div>
-  
-  <button (click)="startGame()">Start Game</button>
+  <label for="genre">Genre:</label>
+  <select id="genre" [(ngModel)]="selectedGenre">
+    <option value=""></option>
+    <option *ngFor="let genre of genres" [value]="genre.id">{{ genre.name }}</option>
+  </select>
+</div>
+
+<div>
+  <label for="searchType">Search Type:</label>
+  <select id="searchType" [(ngModel)]="searchType">
+    <option value="genre">Genre</option>
+    <option value="artist">Artist</option>
+    <option value="album">Album</option>
+  </select>
+</div>
+
+<div>
+  <label for="searchQuery">Search Query:</label>
+  <input id="searchQuery" type="text" [(ngModel)]="searchQuery">
+</div>
+
+<div>
+  <label for="numChoices">Number of Choices per Question:</label>
+  <input id="numChoices" type="number" [(ngModel)]="numChoices" min="2" max="10">
+</div>
+
+<div>
+  <label for="numQuestions">Number of Questions:</label>
+  <input id="numQuestions" type="number" [(ngModel)]="numQuestions" min="2" max="10">
+</div>
+
+<button (click)="startGame()">Start Game</button>

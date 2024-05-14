@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  SPOTIFY_CLIENT_ID: "",
-  SPOTIFY_CLIENT_SECRET: "",
+  SPOTIFY_CLIENT_ID: 'a1e36bd5e8364e5f924ccd50ef8ce3b6',
+  SPOTIFY_CLIENT_SECRET: 'c3b82ff6fdd142da97acde1adda87869'
 };
 
 /*

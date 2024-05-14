@@ -24,6 +24,32 @@
   <button (click)="performGenreSearch(searchQuery)">Search by Genre</button>
 </div>
 
+<div>
+  Number of Questions: 
+  <input type="number" [(ngModel)]="numQuestions" min="1" max="10">
+</div>
+
+<div>
+  Number of Choices per Question: 
+  <input type="number" [(ngModel)]="numChoices" min="2" max="10">
+</div>
+
+<!-- Display questions -->
+<div *ngIf="questions.length > 0">
+  <h3>Questions</h3>
+  <div *ngFor="let question of questions; let i = index">
+    <p>{{ question.text }}</p>
+    <button (click)="playSnippet(question.preview)">Play Snippet</button>
+    <button (click)="pauseSnippet()">Pause Snippet</button>
+    <ul>
+      <li *ngFor="let option of question.options">
+        {{ option.name }}
+        <img [src]="option.img" alt="{{ option.name }}" width="50">
+      </li>
+    </ul>
+  </div>
+</div>
+
 <!-- Display tracks -->
 <div *ngIf="tracks.length > 0">
   <h3>Tracks</h3>

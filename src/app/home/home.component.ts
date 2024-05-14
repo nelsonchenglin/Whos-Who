@@ -1,10 +1,12 @@
 import { Component, OnInit } from "@angular/core";
 import fetchFromSpotify, { request } from "../../services/api";
-import { DataService } from "../data.service";
+import { Router, NavigationExtras } from "@angular/router";
+import { environment } from "src/environments/environment";
 
-const AUTH_ENDPOINT =
-  "https://nuod0t2zoe.execute-api.us-east-2.amazonaws.com/FT-Classroom/spotify-auth-token";
+const AUTH_ENDPOINT = "https://accounts.spotify.com/api/token";
 const TOKEN_KEY = "whos-who-access-token";
+const CLIENT_ID = environment.SPOTIFY_CLIENT_ID;
+const CLIENT_SECRET = environment.SPOTIFY_CLIENT_SECRET;
 
 interface Artist {
   name: string;
@@ -29,6 +31,18 @@ interface SpotifyTrack {
   preview_url: string;
 }
 
+interface Option {
+  name: string;
+  img: string;
+}
+
+interface Question {
+  text: string;
+  options: Option[];
+  correctAnswer: string;
+  preview: string;
+}
+
 @Component({
   selector: "app-home",
   templateUrl: "./home.component.html",
@@ -37,19 +51,26 @@ interface SpotifyTrack {
 export class HomeComponent implements OnInit {
   genres: string[] = ["House", "Alternative", "J-Rock", "R&B"];
   selectedGenre: string = "";
-  albumQuery: string = "";
-  artistQuery: string = "";
-  genreQuery: string = "";
+  albumQuery: string = "";  
+  artistQuery: string = "";  
+  genreQuery: string = "";  
   authLoading: boolean = false;
   configLoading: boolean = false;
   token: string = "";
-  artistId: string = "";
-  albumId: string = "";
-  searchType: string = "genre";
-  searchQuery: string = "";
-  tracks: Track[] = [];
+  artistId: string = '';  
+  albumId: string = '';
+  searchType: string = 'genre';  
+  searchQuery: string = '';  
+  tracks: Track[] = [];  
+  questions: Question[] = [];
+  currentQuestionIndex: number = 0;
+  numChoices: number = 4; // default number of choices
+  numQuestions: number = 1; // default number of questions
+  isPlayingSnippet: boolean = false;
+  currentSnippet: HTMLAudioElement | null = null;
+  errorMessage: string | null = null;
 
-  constructor(private service: DataService) {}
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
     this.authLoading = true;
@@ -79,155 +100,28 @@ export class HomeComponent implements OnInit {
 
   performSearch(): void {
     switch (this.searchType) {
-      case "genre":
+      case 'genre':
         this.searchByGenre(this.searchQuery);
         break;
-      case "artist":
+      case 'artist':
         this.searchArtistsByName(this.searchQuery).then(() => {
           if (this.tracks.length > 0) {
-            console.log("Tracks found:", this.tracks);
+            console.log('Tracks found:', this.tracks);
           }
         });
         break;
-      case "album":
+      case 'album':
         this.searchByAlbumName(this.searchQuery);
         break;
       default:
-        console.error("Invalid search type");
+        console.error('Invalid search type');
         break;
     }
   }
 
   loadGenres = async (t: any) => {
     this.configLoading = true;
-    this.genres = [
-      "acoustic",
-      "afrobeat",
-      "alt-rock",
-      "alternative",
-      "ambient",
-      "anime",
-      "black-metal",
-      "bluegrass",
-      "blues",
-      "bossanova",
-      "brazil",
-      "breakbeat",
-      "british",
-      "cantopop",
-      "chicago-house",
-      "children",
-      "chill",
-      "classical",
-      "club",
-      "comedy",
-      "country",
-      "dance",
-      "dancehall",
-      "death-metal",
-      "deep-house",
-      "detroit-techno",
-      "disco",
-      "disney",
-      "drum-and-bass",
-      "dub",
-      "dubstep",
-      "edm",
-      "electro",
-      "electronic",
-      "emo",
-      "folk",
-      "forro",
-      "french",
-      "funk",
-      "garage",
-      "german",
-      "gospel",
-      "goth",
-      "grindcore",
-      "groove",
-      "grunge",
-      "guitar",
-      "happy",
-      "hard-rock",
-      "hardcore",
-      "hardstyle",
-      "heavy-metal",
-      "hip-hop",
-      "holidays",
-      "honky-tonk",
-      "house",
-      "idm",
-      "indian",
-      "indie",
-      "indie-pop",
-      "industrial",
-      "iranian",
-      "j-dance",
-      "j-idol",
-      "j-pop",
-      "j-rock",
-      "jazz",
-      "k-pop",
-      "kids",
-      "latin",
-      "latino",
-      "malay",
-      "mandopop",
-      "metal",
-      "metal-misc",
-      "metalcore",
-      "minimal-techno",
-      "movies",
-      "mpb",
-      "new-age",
-      "new-release",
-      "opera",
-      "pagode",
-      "party",
-      "philippines-opm",
-      "piano",
-      "pop",
-      "pop-film",
-      "post-dubstep",
-      "power-pop",
-      "progressive-house",
-      "psych-rock",
-      "punk",
-      "punk-rock",
-      "r-n-b",
-      "rainy-day",
-      "reggae",
-      "reggaeton",
-      "road-trip",
-      "rock",
-      "rock-n-roll",
-      "rockabilly",
-      "romance",
-      "sad",
-      "salsa",
-      "samba",
-      "sertanejo",
-      "show-tunes",
-      "singer-songwriter",
-      "ska",
-      "sleep",
-      "songwriter",
-      "soul",
-      "soundtracks",
-      "spanish",
-      "study",
-      "summer",
-      "swedish",
-      "synth-pop",
-      "tango",
-      "techno",
-      "trance",
-      "trip-hop",
-      "turkish",
-      "work-out",
-      "world-music",
-    ];
+    this.genres = ["rock", "rap", "pop", "country", "hip-hop", "jazz", "alternative", "j-pop", "k-pop", "emo"];
     this.configLoading = false;
   };
 
@@ -249,7 +143,7 @@ export class HomeComponent implements OnInit {
   performGenreSearch = async (selectedGenre: string) => {
     if (!selectedGenre || !selectedGenre.trim()) {
       console.warn("Search query is empty.");
-      return; // Changed from return [] to return;
+      return;  // Changed from return [] to return;
     }
 
     console.log("Searching playlists for genre:", selectedGenre); // Verify the incoming genre
@@ -260,21 +154,20 @@ export class HomeComponent implements OnInit {
       params: {
         q: selectedGenre,
         type: "playlist",
-        limit: 20, // Fetch a reasonable number of playlists
+        limit: 20  // Fetch a reasonable number of playlists
       },
     });
 
     if (!response || !response.playlists || !response.playlists.items) {
       console.error("Failed to fetch playlists or no playlists available.");
-      return; // Changed from return [] to return;
+      return;  // Changed from return [] to return;
     }
 
     console.log("Playlist search result:", response);
-    const selectedPlaylist = this.selectRandomPlaylist(
-      response.playlists.items
-    );
+    const selectedPlaylist = this.selectRandomPlaylist(response.playlists.items);
     const tracks = await this.fetchTracksFromPlaylist(selectedPlaylist.id);
     this.tracks = this.getRandomTracks(tracks);
+    this.createQuestions();
     console.log("Tracks fetched:", this.tracks);
   };
 
@@ -290,7 +183,7 @@ export class HomeComponent implements OnInit {
       params: {
         q: selectedGenre,
         type: "playlist",
-        limit: 20, // Fetch a reasonable number of playlists
+        limit: 20  // Fetch a reasonable number of playlists
       },
     });
 
@@ -312,13 +205,13 @@ export class HomeComponent implements OnInit {
     const response = await fetchFromSpotify({
       token: this.token,
       endpoint: `playlists/${playlistId}/tracks`,
-      params: { limit: 50 }, // Adjust based on the number of tracks you expect
+      params: { limit: 50 } // Adjust based on the number of tracks you expect
     });
 
     return response.items.map((item: any) => ({
       id: item.track.id,
       name: item.track.name,
-      preview_url: item.track.preview_url,
+      preview_url: item.track.preview_url
     }));
   };
 
@@ -344,7 +237,7 @@ export class HomeComponent implements OnInit {
     if (response.artists.items.length > 0) {
       const artist = response.artists.items[0];
       this.artistId = artist.id;
-      this.fetchAlbumsAndTracks(artist.id);
+      this.fetchAlbumsAndTracks(artist.id); 
     } else {
       console.warn("No artist found.");
       this.tracks = [];
@@ -355,7 +248,7 @@ export class HomeComponent implements OnInit {
     const albumResponse = await fetchFromSpotify({
       token: this.token,
       endpoint: `artists/${artistId}/albums`,
-      params: { limit: 50, market: "US" },
+      params: { limit: 50, market: 'US' },
     });
     const albums = albumResponse.items;
     if (albums.length > 0) {
@@ -374,16 +267,15 @@ export class HomeComponent implements OnInit {
         endpoint: `albums/${album.id}/tracks`,
         params: { limit: 50 },
       });
-      tracks.push(
-        ...trackResponse.items.map((item: SpotifyTrack) => ({
-          id: item.id,
-          name: item.name,
-          preview_url: item.preview_url,
-        }))
-      );
+      tracks.push(...trackResponse.items.map((item: SpotifyTrack) => ({
+        id: item.id,
+        name: item.name,
+        preview_url: item.preview_url,
+      })));
     }
     tracks = this.shuffleArray(tracks).slice(0, 10);
     this.tracks = tracks;
+    this.createQuestions();
   };
 
   shuffleArray = (array: any[]): any[] => {
@@ -397,4 +289,50 @@ export class HomeComponent implements OnInit {
   selectRandomAlbums = (albums: any[], count: number): any[] => {
     return this.shuffleArray(albums).slice(0, count);
   };
+
+  createQuestions = () => {
+    console.log(`Generating ${this.numQuestions} questions with ${this.numChoices} choices each from ${this.tracks.length} tracks`);
+    if (this.tracks.length < this.numQuestions) {
+      this.errorMessage = "Not enough songs to create questions. Please select a different genre.";
+      console.error(this.errorMessage);
+      return;
+    }
+
+    this.questions = [];
+    for (let i = 0; i < this.numQuestions; i++) {
+      const randomTracks = this.shuffleArray(this.tracks).slice(0, this.numChoices);
+      const correctTrack = randomTracks[Math.floor(Math.random() * randomTracks.length)];
+      const options: Option[] = randomTracks.map(track => ({
+        name: track.name,
+        img: track.img
+      }));
+
+      this.questions.push({
+        text: "Which track is playing?",
+        options,
+        correctAnswer: correctTrack.name,
+        preview: correctTrack.preview_url
+      });
+      console.log(`Question ${i + 1}:`, this.questions[i]);
+    }
+  };
+
+  playSnippet(previewUrl: string) {
+    if (!previewUrl) {
+      console.warn("No preview URL available for this track.");
+      return;
+    }
+    if (this.currentSnippet) {
+      this.currentSnippet.pause();
+      this.currentSnippet = null;
+    }
+    this.currentSnippet = new Audio(previewUrl);
+    this.currentSnippet.play();
+  }
+
+  pauseSnippet() {
+    if (this.currentSnippet) {
+      this.currentSnippet.pause();
+    }
+  }
 }

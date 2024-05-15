@@ -7,7 +7,7 @@ import { SpotifyService } from '../spotify-service';
 interface Track {
   id: string;
   name: string;
-  album?: string;
+  album?: string;  // Optional field
   preview_url?: string;  // Optional field
 }
 

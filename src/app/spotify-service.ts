@@ -99,35 +99,48 @@ export class SpotifyService {
 
     async searchByAlbumName(albumName: string): Promise<Track[]> {
         const response = await fetchFromSpotify({
-            token: this.token,
-            endpoint: "search",
-            params: {
-                q: `album:'${albumName}'`,
-                type: "album",
-                limit: 20
-            }
+          token: this.token,
+          endpoint: 'search',
+          params: { q: `album:'${albumName}'`, type: 'album', limit: 1 }
         });
-        const albums = response.albums.items;
-        let tracks: Track[] = [];
-        for (let album of albums) {
-            const trackResponse = await fetchFromSpotify({
-                token: this.token,
-                endpoint: `albums/${album.id}/tracks`,
-                params: { limit: 50 },
-            });
-            tracks.push(...trackResponse.items.map((item: any) => ({
-                id: item.id,
-                name: item.name,
-                preview_url: item.preview_url,
-            })).filter((track: Track) => track.preview_url));
-        }
-        return tracks;
-    }
+        const album = response.albums.items[0];
+        const tracks = await fetchFromSpotify({
+          token: this.token,
+          endpoint: `albums/${album.id}/tracks`
+        });
+        return tracks.items.map((item: any) => ({
+          id: item.id,
+          name: item.name,
+          album: album.name
+        }));
+      }
 
     selectRandomPlaylist(playlists: any[]): any {
         const randomIndex = Math.floor(Math.random() * playlists.length);
         return playlists[randomIndex];
     }
+
+    async fetchIncorrectTracks(count: number): Promise<Track[]> {
+        const response = await fetchFromSpotify({
+          token: this.token,
+          endpoint: 'browse/new-releases',
+          params: { limit: 50 }
+        });
+        const albums = response.albums.items;
+        let incorrectTracks: Track[] = [];
+        for (const album of albums) {
+          const tracks = await fetchFromSpotify({
+            token: this.token,
+            endpoint: `albums/${album.id}/tracks`
+          });
+          incorrectTracks.push(...tracks.items.map((item: any) => ({
+            id: item.id,
+            name: item.name,
+            album: album.name
+          })));
+        }
+        return this.shuffleArray(incorrectTracks).slice(0, count);
+      }
 
     shuffleArray(array: any[]): any[] {
         for (let i = array.length - 1; i > 0; i--) {

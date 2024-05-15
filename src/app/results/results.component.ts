@@ -7,7 +7,6 @@ interface LeaderboardEntry {
   percentage: number;
 }
 
-
 @Component({
   selector: 'app-results',
   templateUrl: './results.component.html',
@@ -22,14 +21,16 @@ export class ResultsComponent implements OnInit {
   constructor(private router: Router) {
     const navigation = this.router.getCurrentNavigation();
     const state = navigation?.extras.state as { score: number, numQuestions: number };
-    this.score = state.score;
-    this.numQuestions = state.numQuestions;
+    if (state) {
+      this.score = state.score;
+      this.numQuestions = state.numQuestions;
+    }
   }
 
   ngOnInit(): void {
+    this.loadLeaderboard();
     this.calculateResult();
     this.updateLeaderboard();
-    this.loadLeaderboard();
   }
 
   calculateResult(): void {
@@ -45,6 +46,7 @@ export class ResultsComponent implements OnInit {
       score: this.score,
       percentage: percentage
     };
+
     this.leaderboard.push(newEntry);
     this.leaderboard.sort((a, b) => b.percentage - a.percentage);
     this.saveLeaderboard();
@@ -52,6 +54,7 @@ export class ResultsComponent implements OnInit {
 
   saveLeaderboard(): void {
     localStorage.setItem('leaderboard', JSON.stringify(this.leaderboard));
+    console.log('Leaderboard saved:', this.leaderboard);  // Debugging log
   }
 
   loadLeaderboard(): void {
@@ -59,6 +62,7 @@ export class ResultsComponent implements OnInit {
     if (storedLeaderboard) {
       this.leaderboard = JSON.parse(storedLeaderboard);
     }
+    console.log('Loaded leaderboard:', this.leaderboard);  // Debugging log
   }
 
   restart() {

@@ -43,8 +43,8 @@ export class GameComponent implements OnInit {
   authLoading: boolean = false;
   isPlayingSnippet: boolean = false;
   currentSnippet: HTMLAudioElement | null = null;
-  tracks: Track[] = [];  // Define the tracks property
-  selectedAnswer: string = '';  // Define a property to store the selected answer
+  tracks: Track[] = [];
+  selectedAnswer: string = '';
 
   constructor(private router: Router, private spotifyService: SpotifyService) {
     const navigation = this.router.getCurrentNavigation();
@@ -169,14 +169,17 @@ export class GameComponent implements OnInit {
           img: '' // Adjust this if you want to display album images
         }));
 
-        options.push({
+        // Ensure the correct track is not duplicated in the options
+        const uniqueIncorrectTracks = options.filter(option => option.name !== correctTrack.name);
+
+        uniqueIncorrectTracks.push({
           name: correctTrack.name,
           img: '' // Adjust this if you want to display album images
         });
 
         this.questions.push({
           text: `Which track is from the album ${this.searchQuery}?`,
-          options: this.spotifyService.shuffleArray(options),
+          options: this.spotifyService.shuffleArray(uniqueIncorrectTracks),
           correctAnswer: correctTrack.name
         });
       }

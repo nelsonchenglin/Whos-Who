@@ -26,7 +26,7 @@
   </div>
   
   <div class="form-group">
-    <label for="genre">Genre:</label>
+    <label for="genre">Genre: Choose Your Genre Type If You Are Playing Genre Game</label>
     <select id="genre" [(ngModel)]="selectedGenre">
       <option value=""></option>
       <option *ngFor="let genre of genres" [value]="genre.id">{{ genre.name }}</option>
@@ -43,7 +43,7 @@
   </div>
 
   <div class="form-group">
-    <label for="searchQuery">Album Search Query:</label>
+    <label for="searchQuery">Album Search Query(Leave Blank if Playing Genre Game):</label>
     <input id="searchQuery" type="text" [(ngModel)]="searchQuery">
   </div>
 

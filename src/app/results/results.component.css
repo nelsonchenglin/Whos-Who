@@ -1,0 +1,37 @@
+.leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .leaderboard-table th, .leaderboard-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  .leaderboard-table th {
+    background-color: #f2f2f2;
+    text-align: left;
+    font-size: 1.1em;
+  }
+  
+  .leaderboard-table td {
+    font-size: 1em;
+  }
+  
+  .leaderboard-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .leaderboard-table tr:hover {
+    background-color: #ddd;
+  }
+  
+  .leaderboard-table th, .leaderboard-table td {
+    padding: 12px 15px;
+  }
+  
+  .leaderboard-table td:last-child {
+    text-align: right;
+    font-size: 1.1em;
+  }

@@ -5,6 +5,7 @@ interface LeaderboardEntry {
   name: string;
   score: number;
   percentage: number;
+  gameType: string;  // Add gameType to the interface
 }
 
 @Component({
@@ -17,13 +18,15 @@ export class ResultsComponent implements OnInit {
   numQuestions: number = 0;
   resultMessage: string = '';
   leaderboard: LeaderboardEntry[] = [];
+  gameType: string = '';  // Add gameType property
 
   constructor(private router: Router) {
     const navigation = this.router.getCurrentNavigation();
-    const state = navigation?.extras.state as { score: number, numQuestions: number };
+    const state = navigation?.extras.state as { score: number, numQuestions: number, gameType: string };
     if (state) {
       this.score = state.score;
       this.numQuestions = state.numQuestions;
+      this.gameType = state.gameType;  // Set gameType from state
     }
   }
 
@@ -44,7 +47,8 @@ export class ResultsComponent implements OnInit {
     const newEntry: LeaderboardEntry = {
       name: playerName || 'Anonymous',
       score: this.score,
-      percentage: percentage
+      percentage: percentage,
+      gameType: this.gameType  // Store gameType in leaderboard entry
     };
 
     this.leaderboard.push(newEntry);
@@ -54,7 +58,6 @@ export class ResultsComponent implements OnInit {
 
   saveLeaderboard(): void {
     localStorage.setItem('leaderboard', JSON.stringify(this.leaderboard));
-    console.log('Leaderboard saved:', this.leaderboard);  // Debugging log
   }
 
   loadLeaderboard(): void {
@@ -62,7 +65,6 @@ export class ResultsComponent implements OnInit {
     if (storedLeaderboard) {
       this.leaderboard = JSON.parse(storedLeaderboard);
     }
-    console.log('Loaded leaderboard:', this.leaderboard);  // Debugging log
   }
 
   restart() {

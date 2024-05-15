@@ -228,6 +228,6 @@ export class GameComponent implements OnInit {
       this.score++;
     }
 
-    this.router.navigate(['/results'], { state: { score: this.score, numQuestions: this.numQuestions } });
+    this.router.navigate(['/results'], { state: { score: this.score, numQuestions: this.numQuestions, gameType: this.searchType } });  // Pass gameType to results page
   }
 }

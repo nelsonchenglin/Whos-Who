@@ -7,9 +7,20 @@
 
 <div>
   <h3>Leaderboard</h3>
-  <ul>
-    <li *ngFor="let entry of leaderboard">
-      {{ entry.name }}: {{ entry.score }} ({{ entry.percentage.toFixed(2) }}%)
-    </li>
-  </ul>
+  <table class="leaderboard-table">
+    <thead>
+      <tr>
+        <th>Player</th>
+        <th>Score</th>
+        <th>Type of Game</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let entry of leaderboard">
+        <td>{{ entry.name }}</td>
+        <td>{{ entry.score }} ({{ entry.percentage.toFixed(2) }}%)</td>
+        <td>{{ entry.gameType }}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>

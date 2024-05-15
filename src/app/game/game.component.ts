@@ -44,6 +44,7 @@ export class GameComponent implements OnInit {
   isPlayingSnippet: boolean = false;
   currentSnippet: HTMLAudioElement | null = null;
   tracks: Track[] = [];  // Define the tracks property
+  selectedAnswer: string = '';  // Define a property to store the selected answer
 
   constructor(private router: Router, private spotifyService: SpotifyService) {
     const navigation = this.router.getCurrentNavigation();
@@ -204,13 +205,29 @@ export class GameComponent implements OnInit {
   }
 
   selectAnswer(option: string) {
+    this.selectedAnswer = option;  // Store the selected answer
+  }
+
+  nextQuestion() {
+    this.pauseSnippet();  // Pause the snippet when navigating to the next question
+
     const currentQuestion = this.questions[this.currentQuestionIndex];
-    if (option === currentQuestion.correctAnswer) {
+    if (this.selectedAnswer === currentQuestion.correctAnswer) {
       this.score++;
     }
+
     this.currentQuestionIndex++;
-    if (this.currentQuestionIndex >= this.numQuestions) {
-      this.router.navigate(['/results'], { state: { score: this.score, numQuestions: this.numQuestions } });
+    this.selectedAnswer = '';  // Reset selected answer for next question
+  }
+
+  submitQuiz() {
+    this.pauseSnippet();  // Pause the snippet when navigating to the results page
+
+    const currentQuestion = this.questions[this.currentQuestionIndex];
+    if (this.selectedAnswer === currentQuestion.correctAnswer) {
+      this.score++;
     }
+
+    this.router.navigate(['/results'], { state: { score: this.score, numQuestions: this.numQuestions } });
   }
 }

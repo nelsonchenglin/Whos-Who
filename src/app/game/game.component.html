@@ -17,6 +17,6 @@
       <button (click)="selectAnswer(option.name)">{{ option.name }}</button>
     </li>
   </ul>
-  <button *ngIf="currentQuestionIndex < numQuestions - 1" (click)="currentQuestionIndex = currentQuestionIndex + 1">Next Question</button>
-  <button *ngIf="currentQuestionIndex >= numQuestions - 1" (click)="selectAnswer('')">Submit</button>
+  <button *ngIf="currentQuestionIndex < numQuestions - 1" (click)="nextQuestion()">Next Question</button>
+  <button *ngIf="currentQuestionIndex >= numQuestions - 1" (click)="submitQuiz()">Submit</button>
 </div>

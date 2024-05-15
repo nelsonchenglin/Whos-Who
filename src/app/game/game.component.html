@@ -1,0 +1,22 @@
+<div *ngIf="questions.length > 0 && currentQuestionIndex < numQuestions">
+  <h3>Question {{ currentQuestionIndex + 1 }}</h3>
+
+  <!-- Display the album name if searchType is 'album' -->
+  <p *ngIf="searchType === 'album'">Album: {{ searchQuery }}</p>
+
+  <p>{{ questions[currentQuestionIndex].text }}</p>
+
+  <!-- Conditionally show play/pause buttons for questions with a preview field -->
+  <div *ngIf="questions[currentQuestionIndex].preview">
+    <button (click)="playSnippet(questions[currentQuestionIndex].preview)">Play Snippet</button>
+    <button (click)="pauseSnippet()">Pause Snippet</button>
+  </div>
+
+  <ul>
+    <li *ngFor="let option of questions[currentQuestionIndex].options">
+      <button (click)="selectAnswer(option.name)">{{ option.name }}</button>
+    </li>
+  </ul>
+  <button *ngIf="currentQuestionIndex < numQuestions - 1" (click)="currentQuestionIndex = currentQuestionIndex + 1">Next Question</button>
+  <button *ngIf="currentQuestionIndex >= numQuestions - 1" (click)="selectAnswer('')">Submit</button>
+</div>

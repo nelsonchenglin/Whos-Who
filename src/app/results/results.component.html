@@ -1,0 +1,15 @@
+<div>
+  <h3>Results</h3>
+  <p>Your score: {{ score }} out of {{ numQuestions }}</p>
+  <p>{{ resultMessage }}</p>
+  <button (click)="restart()">Restart Game</button>
+</div>
+
+<div>
+  <h3>Leaderboard</h3>
+  <ul>
+    <li *ngFor="let entry of leaderboard">
+      {{ entry.name }}: {{ entry.score }} ({{ entry.percentage.toFixed(2) }}%)
+    </li>
+  </ul>
+</div>

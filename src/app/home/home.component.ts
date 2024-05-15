@@ -107,6 +107,8 @@ export class HomeComponent implements OnInit {
         this.searchArtistsByName(this.searchQuery).then(() => {
           if (this.tracks.length > 0) {
             console.log('Tracks found:', this.tracks);
+             this.tracks.forEach(track => console.log('Track preview URL:', track.preview_url));
+            this.createQuestions();
           }
         });
         break;
@@ -205,14 +207,19 @@ export class HomeComponent implements OnInit {
     const response = await fetchFromSpotify({
       token: this.token,
       endpoint: `playlists/${playlistId}/tracks`,
-      params: { limit: 50 } // Adjust based on the number of tracks you expect
+      params: { limit: 50 }
     });
-
-    return response.items.map((item: any) => ({
+  
+    let tracks = response.items.map((item: any) => ({
       id: item.track.id,
       name: item.track.name,
       preview_url: item.track.preview_url
     }));
+  
+    // Filter out tracks without preview URLs
+    tracks = tracks.filter((track : Track) => track.preview_url);
+    
+    return tracks;
   };
 
   getRandomTracks = (tracks: any[], count: number = 10): any[] => {

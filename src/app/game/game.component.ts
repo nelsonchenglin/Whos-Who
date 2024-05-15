@@ -7,8 +7,8 @@ import { SpotifyService } from '../spotify-service';
 interface Track {
   id: string;
   name: string;
-  album?: string;  // Optional field
-  preview_url?: string;  // Optional field
+  album?: string;
+  preview_url?: string;
 }
 
 interface Option {
@@ -20,7 +20,7 @@ interface Question {
   text: string;
   options: Option[];
   correctAnswer: string;
-  preview?: string;  // Optional field
+  preview?: string;
 }
 
 const AUTH_ENDPOINT = "https://nuod0t2zoe.execute-api.us-east-2.amazonaws.com/FT-Classroom/spotify-auth-token";
@@ -154,7 +154,7 @@ export class GameComponent implements OnInit {
   async createAlbumQuestions() {
     try {
       const albumTracks = await this.spotifyService.searchByAlbumName(this.searchQuery);
-      const incorrectTracks = await this.spotifyService.fetchIncorrectTracks(this.numChoices - 1);
+      const incorrectTracks = await this.spotifyService.fetchIncorrectTracks(this.numChoices * this.numQuestions);
 
       if (albumTracks.length === 0) {
         console.error("No tracks found for the specified album.");
@@ -164,22 +164,20 @@ export class GameComponent implements OnInit {
       this.questions = [];
       for (let i = 0; i < this.numQuestions; i++) {
         const correctTrack = albumTracks[Math.floor(Math.random() * albumTracks.length)];
-        const options: Option[] = incorrectTracks.slice(0, this.numChoices - 1).map(track => ({
+        const randomIncorrectTracks = this.spotifyService.shuffleArray(incorrectTracks).slice(0, this.numChoices - 1);
+        const options: Option[] = randomIncorrectTracks.map(track => ({
           name: track.name,
           img: '' // Adjust this if you want to display album images
         }));
 
-        // Ensure the correct track is not duplicated in the options
-        const uniqueIncorrectTracks = options.filter(option => option.name !== correctTrack.name);
-
-        uniqueIncorrectTracks.push({
+        options.push({
           name: correctTrack.name,
           img: '' // Adjust this if you want to display album images
         });
 
         this.questions.push({
           text: `Which track is from the album ${this.searchQuery}?`,
-          options: this.spotifyService.shuffleArray(uniqueIncorrectTracks),
+          options: this.spotifyService.shuffleArray(options),
           correctAnswer: correctTrack.name
         });
       }
@@ -208,11 +206,11 @@ export class GameComponent implements OnInit {
   }
 
   selectAnswer(option: string) {
-    this.selectedAnswer = option;  // Store the selected answer
+    this.selectedAnswer = option;
   }
 
   nextQuestion() {
-    this.pauseSnippet();  // Pause the snippet when navigating to the next question
+    this.pauseSnippet();
 
     const currentQuestion = this.questions[this.currentQuestionIndex];
     if (this.selectedAnswer === currentQuestion.correctAnswer) {
@@ -220,17 +218,17 @@ export class GameComponent implements OnInit {
     }
 
     this.currentQuestionIndex++;
-    this.selectedAnswer = '';  // Reset selected answer for next question
+    this.selectedAnswer = '';
   }
 
   submitQuiz() {
-    this.pauseSnippet();  // Pause the snippet when navigating to the results page
+    this.pauseSnippet();
 
     const currentQuestion = this.questions[this.currentQuestionIndex];
     if (this.selectedAnswer === currentQuestion.correctAnswer) {
       this.score++;
     }
 
-    this.router.navigate(['/results'], { state: { score: this.score, numQuestions: this.numQuestions, gameType: this.searchType } });  // Pass gameType to results page
+    this.router.navigate(['/results'], { state: { score: this.score, numQuestions: this.numQuestions, gameType: this.searchType } });
   }
 }

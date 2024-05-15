@@ -5,7 +5,7 @@ interface LeaderboardEntry {
   name: string;
   score: number;
   percentage: number;
-  gameType: string;  // Add gameType to the interface
+  gameType: string;
 }
 
 @Component({
@@ -18,7 +18,7 @@ export class ResultsComponent implements OnInit {
   numQuestions: number = 0;
   resultMessage: string = '';
   leaderboard: LeaderboardEntry[] = [];
-  gameType: string = '';  // Add gameType property
+  gameType: string = '';
 
   constructor(private router: Router) {
     const navigation = this.router.getCurrentNavigation();
@@ -26,7 +26,7 @@ export class ResultsComponent implements OnInit {
     if (state) {
       this.score = state.score;
       this.numQuestions = state.numQuestions;
-      this.gameType = state.gameType;  // Set gameType from state
+      this.gameType = state.gameType;
     }
   }
 
@@ -48,7 +48,7 @@ export class ResultsComponent implements OnInit {
       name: playerName || 'Anonymous',
       score: this.score,
       percentage: percentage,
-      gameType: this.gameType  // Store gameType in leaderboard entry
+      gameType: this.gameType
     };
 
     this.leaderboard.push(newEntry);

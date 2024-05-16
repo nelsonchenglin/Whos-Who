@@ -153,34 +153,55 @@ export class GameComponent implements OnInit {
 
   async createAlbumQuestions() {
     try {
-      console.log('Creating album questions...');
+      console.log(`Searching for tracks in album: ${this.searchQuery}`);
       const albumTracks = await this.spotifyService.searchByAlbumName(this.searchQuery);
-      console.log('Album tracks:', albumTracks);
+      console.log('Fetched album tracks:', albumTracks);
+  
       const incorrectTracks = await this.spotifyService.fetchIncorrectTracks(this.numChoices * this.numQuestions);
-      console.log('Incorrect tracks:', incorrectTracks);
-
+      console.log('Fetched incorrect tracks:', incorrectTracks);
+  
       if (albumTracks.length === 0) {
         console.error("No tracks found for the specified album.");
         return;
       }
-
+  
+      // Ensure we have enough unique album tracks for the number of questions
+      if (albumTracks.length < this.numQuestions) {
+        console.error(`Not enough unique tracks in the album to create ${this.numQuestions} questions.`);
+        return;
+      }
+  
+      // Shuffle albumTracks to ensure randomness
+      const shuffledAlbumTracks = this.spotifyService.shuffleArray(albumTracks);
+  
       this.questions = [];
       for (let i = 0; i < this.numQuestions; i++) {
-        const correctTrack = albumTracks[Math.floor(Math.random() * albumTracks.length)];
+        // Get a unique correct track for each question
+        const correctTrack = shuffledAlbumTracks[i];
+        console.log(`Selected correct track for question ${i + 1}:`, correctTrack);
+  
+        // Get random incorrect tracks
         const randomIncorrectTracks = this.spotifyService.shuffleArray(incorrectTracks).slice(0, this.numChoices - 1);
+        console.log(`Selected incorrect tracks for question ${i + 1}:`, randomIncorrectTracks);
+  
+        // Create options
         const options: Option[] = randomIncorrectTracks.map(track => ({
           name: track.name,
           img: '' // Adjust this if you want to display album images
         }));
-
+  
         options.push({
           name: correctTrack.name,
           img: '' // Adjust this if you want to display album images
         });
-
+  
+        // Shuffle options to randomize the position of the correct answer
+        const shuffledOptions = this.spotifyService.shuffleArray(options);
+  
+        // Add the question
         this.questions.push({
           text: `Which track is from the album ${this.searchQuery}?`,
-          options: this.spotifyService.shuffleArray(options),
+          options: shuffledOptions,
           correctAnswer: correctTrack.name
         });
         console.log(`Question ${i + 1}:`, this.questions[i]);

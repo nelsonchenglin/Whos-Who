@@ -132,7 +132,8 @@ export class SpotifyService {
         return tracks.items.map((item: any) => ({
           id: item.id,
           name: item.name,
-          album: album.name
+          album: album.name,
+          preview_url: item.preview_url // Include the preview URL if available
         }));
       }
 
@@ -163,11 +164,11 @@ export class SpotifyService {
         return this.shuffleArray(incorrectTracks).slice(0, count);
       }
 
-    shuffleArray(array: any[]): any[] {
+      shuffleArray(array: any[]): any[] {
         for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
+          const j = Math.floor(Math.random() * (i + 1));
+          [array[i], array[j]] = [array[j], array[i]];
         }
         return array;
+      }
     }
-}

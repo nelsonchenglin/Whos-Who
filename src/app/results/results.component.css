@@ -1,37 +1,72 @@
-.leaderboard-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-  }
-  
-  .leaderboard-table th, .leaderboard-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-  }
-  
-  .leaderboard-table th {
-    background-color: #f2f2f2;
-    text-align: left;
-    font-size: 1.1em;
-  }
-  
-  .leaderboard-table td {
-    font-size: 1em;
-  }
-  
-  .leaderboard-table tr:nth-child(even) {
-    background-color: #f9f9f9;
-  }
-  
-  .leaderboard-table tr:hover {
-    background-color: #ddd;
-  }
-  
-  .leaderboard-table th, .leaderboard-table td {
-    padding: 12px 15px;
-  }
-  
-  .leaderboard-table td:last-child {
-    text-align: right;
-    font-size: 1.1em;
-  }
+.restart {
+  position: fixed;
+  top: 20px;
+  right: 100px;
+  z-index: 1000; /* Ensure it's above other content */
+  background-color: gray;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.restart:hover {
+  background-color: white;
+  color: black;
+}
+
+.end {
+  position: fixed;
+  top: 20px;
+  right: 1px;
+  z-index: 1000; /* Ensure it's above other content */
+  background-color: gray;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.end:hover {
+  background-color: white;
+  color: black;
+}
+
+.gameEnded {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Full viewport height to vertically center */
+  font-family: "Cursive", sans-serif; /* Cursive font */
+  text-align: center; /* Center text */
+}
+
+.container {
+  border: 2px solid #000; /* Border for the rectangle */
+  background-color: #f0f0f0; /* Background color */
+  padding: 20px; /* Padding inside the rectangle */
+  border-radius: 10px; /* Rounded corners */
+  margin-top: 20px; /* Space above the container */
+}
+
+/* Style for the table */
+table {
+  width: 100%;
+  border-collapse: collapse; /* Ensures borders are shared between cells */
+}
+
+th, td {
+  border: 1px solid #000; /* Borders for table cells */
+  padding: 8px; /* Padding inside cells */
+  text-align: left; /* Align text to the left */
+}
+
+th {
+  background-color: #ddd; /* Background color for table headers */
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9; /* Zebra striping for rows */
+}

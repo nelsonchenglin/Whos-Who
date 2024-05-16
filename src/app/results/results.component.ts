@@ -6,6 +6,7 @@ interface LeaderboardEntry {
   score: number;
   percentage: number;
   gameType: string;
+
 }
 
 @Component({
@@ -19,6 +20,7 @@ export class ResultsComponent implements OnInit {
   resultMessage: string = '';
   leaderboard: LeaderboardEntry[] = [];
   gameType: string = '';
+  gameEnded: boolean =false;
 
   constructor(private router: Router) {
     const navigation = this.router.getCurrentNavigation();
@@ -69,5 +71,12 @@ export class ResultsComponent implements OnInit {
 
   restart() {
     this.router.navigate(['/']);
+  }
+
+  end()
+  {
+    this.gameEnded = true;
+    this.resultMessage = "Thank you for playing!";
+    localStorage.removeItem('scores');
   }
 }

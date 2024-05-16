@@ -1,26 +1,44 @@
-<div>
+
+<div  *ngIf="!gameEnded">
   <h3>Results</h3>
   <p>Your score: {{ score }} out of {{ numQuestions }}</p>
   <p>{{ resultMessage }}</p>
-  <button (click)="restart()">Restart Game</button>
-</div>
+  <button class="restart" (click)="restart()">Restart Game</button>
+  <button class="end" (click)="end()">End Game</button>
 
 <div>
   <h3>Leaderboard</h3>
-  <table class="leaderboard-table">
-    <thead>
-      <tr>
-        <th>Player</th>
-        <th>Score</th>
-        <th>Type of Game</th>
-      </tr>
-    </thead>
-    <tbody>
+
+
+</div>
+  <div class="container">
+    <table>
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Score</th>
+          <th>Percentage</th>
+        </tr>
+      </thead>
+      <tbody>
+     
+         
       <tr *ngFor="let entry of leaderboard">
         <td>{{ entry.name }}</td>
-        <td>{{ entry.score }} ({{ entry.percentage.toFixed(2) }}%)</td>
-        <td>{{ entry.gameType }}</td>
-      </tr>
-    </tbody>
-  </table>
+        <td>{{ entry.score }}</td> 
+      <td>{{ entry.percentage.toFixed(2) }}%</td> 
+        </tr>
+   
+    
+      </tbody>
+    </table>
+</div>
+</div>
+
+
+
+
+<div class="gameEnded" *ngIf="gameEnded">
+  <h3>{{ resultMessage }}</h3>
+
 </div>

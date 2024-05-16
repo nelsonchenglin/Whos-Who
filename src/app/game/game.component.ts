@@ -153,8 +153,11 @@ export class GameComponent implements OnInit {
 
   async createAlbumQuestions() {
     try {
+      console.log('Creating album questions...');
       const albumTracks = await this.spotifyService.searchByAlbumName(this.searchQuery);
+      console.log('Album tracks:', albumTracks);
       const incorrectTracks = await this.spotifyService.fetchIncorrectTracks(this.numChoices * this.numQuestions);
+      console.log('Incorrect tracks:', incorrectTracks);
 
       if (albumTracks.length === 0) {
         console.error("No tracks found for the specified album.");
@@ -180,6 +183,7 @@ export class GameComponent implements OnInit {
           options: this.spotifyService.shuffleArray(options),
           correctAnswer: correctTrack.name
         });
+        console.log(`Question ${i + 1}:`, this.questions[i]);
       }
     } catch (error) {
       console.error('Failed to create album questions:', error);
@@ -206,29 +210,44 @@ export class GameComponent implements OnInit {
   }
 
   selectAnswer(option: string) {
+    console.log(`Selected answer: ${option}`);
     this.selectedAnswer = option;
   }
 
   nextQuestion() {
     this.pauseSnippet();
+    console.log(`Current question: ${this.questions[this.currentQuestionIndex].text}`);
+    console.log(`Selected answer: ${this.selectedAnswer}`);
+    console.log(`Correct answer: ${this.questions[this.currentQuestionIndex].correctAnswer}`);
 
     const currentQuestion = this.questions[this.currentQuestionIndex];
     if (this.selectedAnswer === currentQuestion.correctAnswer) {
+      console.log('Correct answer selected');
       this.score++;
+    } else {
+      console.log('Incorrect answer selected');
     }
 
     this.currentQuestionIndex++;
     this.selectedAnswer = '';
+    console.log(`Next question index: ${this.currentQuestionIndex}`);
   }
 
   submitQuiz() {
     this.pauseSnippet();
+    console.log(`Submitting quiz. Current question: ${this.questions[this.currentQuestionIndex].text}`);
+    console.log(`Selected answer: ${this.selectedAnswer}`);
+    console.log(`Correct answer: ${this.questions[this.currentQuestionIndex].correctAnswer}`);
 
     const currentQuestion = this.questions[this.currentQuestionIndex];
     if (this.selectedAnswer === currentQuestion.correctAnswer) {
+      console.log('Correct answer selected');
       this.score++;
+    } else {
+      console.log('Incorrect answer selected');
     }
 
+    console.log(`Final score: ${this.score} out of ${this.numQuestions}`);
     this.router.navigate(['/results'], { state: { score: this.score, numQuestions: this.numQuestions, gameType: this.searchType } });
   }
 }

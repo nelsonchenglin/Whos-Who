@@ -10,6 +10,7 @@ interface Genre {
 
 const AUTH_ENDPOINT = "https://nuod0t2zoe.execute-api.us-east-2.amazonaws.com/FT-Classroom/spotify-auth-token";
 const TOKEN_KEY = "whos-who-access-token";
+const SETTINGS_KEY = "music-trivia-settings";
 
 @Component({
   selector: 'app-set-up-game-configuration',
@@ -29,6 +30,7 @@ export class SetUpGameConfigurationComponent implements OnInit {
 
   ngOnInit(): void {
     console.log('Initializing SetUpGameConfigurationComponent...');
+    this.loadSettings();
     const storedTokenString = localStorage.getItem(TOKEN_KEY);
     if (storedTokenString) {
       const storedToken = JSON.parse(storedTokenString);
@@ -67,16 +69,28 @@ export class SetUpGameConfigurationComponent implements OnInit {
   }
 
   startGame() {
-    const navigationExtras = {
-      state: {
-        searchType: this.searchType,
-        searchQuery: this.searchQuery,
-        selectedGenre: this.selectedGenre,
-        numChoices: this.numChoices,
-        numQuestions: this.numQuestions
-      }
+    const settings = {
+      searchType: this.searchType,
+      searchQuery: this.searchQuery,
+      selectedGenre: this.selectedGenre,
+      numChoices: this.numChoices,
+      numQuestions: this.numQuestions
     };
-    console.log('Starting game with configuration:', navigationExtras);
-    this.router.navigate(['/game'], navigationExtras);
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+    console.log('Starting game with configuration:', settings);
+    this.router.navigate(['/game'], { state: settings });
+  }
+
+  loadSettings(): void {
+    const storedSettings = localStorage.getItem(SETTINGS_KEY);
+    if (storedSettings) {
+      const settings = JSON.parse(storedSettings);
+      this.searchType = settings.searchType;
+      this.searchQuery = settings.searchQuery;
+      this.selectedGenre = settings.selectedGenre;
+      this.numChoices = settings.numChoices;
+      this.numQuestions = settings.numQuestions;
+      console.log('Loaded settings:', settings);
+    }
   }
 }

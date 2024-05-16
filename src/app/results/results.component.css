@@ -3,7 +3,7 @@
   top: 20px;
   right: 100px;
   z-index: 1000; /* Ensure it's above other content */
-  background-color: gray;
+  background-color: #007bff;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -21,7 +21,7 @@
   top: 20px;
   right: 1px;
   z-index: 1000; /* Ensure it's above other content */
-  background-color: gray;
+  background-color:  #007bff;
   color: white;
   border: none;
   padding: 10px 20px;

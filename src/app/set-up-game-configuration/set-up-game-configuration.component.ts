@@ -93,4 +93,8 @@ export class SetUpGameConfigurationComponent implements OnInit {
       console.log('Loaded settings:', settings);
     }
   }
+
+  Leaderboard() {
+    this.router.navigate(['/results']);
+  }
 }

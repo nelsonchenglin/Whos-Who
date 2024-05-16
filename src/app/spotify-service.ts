@@ -119,23 +119,39 @@ export class SpotifyService {
     }
 
     async searchByAlbumName(albumName: string): Promise<Track[]> {
+        console.log(`Searching for album: ${albumName}`); // Log the album search query
         const response = await fetchFromSpotify({
           token: this.token,
           endpoint: 'search',
-          params: { q: `album:'${albumName}'`, type: 'album', limit: 1 }
+          params: { q: `album:"${albumName}"`, type: 'album', limit: 1 }
         });
+      
+        console.log('Album search response:', response); // Log the album search response
+      
+        if (response.albums.items.length === 0) {
+          console.error('No albums found for the specified name.');
+          return [];
+        }
+      
         const album = response.albums.items[0];
-        const tracks = await fetchFromSpotify({
+        console.log('Fetched album:', album); // Log the fetched album details
+      
+        const tracksResponse = await fetchFromSpotify({
           token: this.token,
-          endpoint: `albums/${album.id}/tracks`
+          endpoint: `albums/${album.id}/tracks`,
+          params: { limit: 50 }
         });
-        return tracks.items.map((item: any) => ({
+      
+        console.log('Album tracks response:', tracksResponse); // Log the album tracks response
+      
+        return tracksResponse.items.map((item: any) => ({
           id: item.id,
           name: item.name,
           album: album.name,
           preview_url: item.preview_url // Include the preview URL if available
         }));
       }
+      
 
     selectRandomPlaylist(playlists: any[]): any {
         const randomIndex = Math.floor(Math.random() * playlists.length);
@@ -143,32 +159,43 @@ export class SpotifyService {
     }
 
     async fetchIncorrectTracks(count: number): Promise<Track[]> {
+        console.log(`Fetching incorrect tracks, count: ${count}`);
         const response = await fetchFromSpotify({
           token: this.token,
           endpoint: 'browse/new-releases',
           params: { limit: 50 }
         });
+      
+        console.log('New releases response:', response);
+      
         const albums = response.albums.items;
         let incorrectTracks: Track[] = [];
         for (const album of albums) {
-          const tracks = await fetchFromSpotify({
+          const tracksResponse = await fetchFromSpotify({
             token: this.token,
             endpoint: `albums/${album.id}/tracks`
           });
-          incorrectTracks.push(...tracks.items.map((item: any) => ({
+          console.log(`Tracks from album ${album.name}:`, tracksResponse);
+      
+          incorrectTracks.push(...tracksResponse.items.map((item: any) => ({
             id: item.id,
             name: item.name,
             album: album.name
           })));
         }
+      
+        console.log('All fetched incorrect tracks:', incorrectTracks);
         return this.shuffleArray(incorrectTracks).slice(0, count);
       }
-
+     
       shuffleArray(array: any[]): any[] {
+        console.log('Shuffling array:', array);
         for (let i = array.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
           [array[i], array[j]] = [array[j], array[i]];
         }
+        console.log('Shuffled array:', array);
         return array;
       }
+      
     }

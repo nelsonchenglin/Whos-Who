@@ -1,0 +1,80 @@
+.config-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100vw;
+  background-color: #282c34;
+  height: 100vh;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.4);
+  color: #87ceeb;
+}
+
+.aligned-box {
+  width: 35vw;
+  border: 2px solid white;
+  border-radius: 10px;
+  animation: glow 2s infinite alternate;
+  height: 45vh;
+  justify-content: center;
+  margin-top: 45px;
+}
+
+.aligned-box h2 {
+  width: 100%;
+  text-align: center;
+}
+
+.config-field {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  margin-top: 20px;
+}
+
+.config-field label {
+  flex: 1;
+  text-align: left;
+  padding-left: 5%;
+}
+
+.input-field {
+  width: 25%;
+  box-sizing: border-box;
+  margin-right: 5%;
+}
+
+.button-container {
+  width: 100%;
+  text-align: center;
+  margin-top: 10px;
+}
+
+#start-button {
+  text-align: center;
+  justify-content: center;
+  width: 50%;
+  cursor: pointer;
+  margin-top: 25px;
+  margin-bottom: 15px;
+  height: 30px;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.4);
+  background: black;
+  font-size: 16px;
+  color: #87ceeb;
+}
+
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.5), 0 0 20px rgba(0, 255, 255, 0.5),
+      0 0 20px rgba(0, 255, 255, 0.5), 0 0 40px rgba(0, 255, 255, 0.5),
+      0 0 60px rgba(0, 255, 255, 0.5), 0 0 80px rgba(0, 255, 255, 0.5),
+      0 0 90px rgba(0, 255, 255, 0.5), 0 0 150px rgba(0, 255, 255, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.9), 0 0 30px rgba(0, 255, 255, 0.9),
+      0 0 35px rgba(0, 255, 255, 0.9), 0 0 60px rgba(0, 255, 255, 0.9),
+      0 0 80px rgba(0, 255, 255, 0.9), 0 0 100px rgba(0, 255, 255, 0.9),
+      0 0 110px rgba(0, 255, 255, 0.9), 0 0 180px rgba(0, 255, 255, 0.9);
+  }
+}

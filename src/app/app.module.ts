@@ -4,7 +4,7 @@ import { FormsModule } from "@angular/forms";
 import { RouterModule, Routes } from "@angular/router";
 
 import { AppComponent } from "./app.component";
-import { HomeComponent } from "./home/home.component";
+// import { HomeComponent } from "./home/home.component";
 import { SetUpGameConfigurationComponent } from "./set-up-game-configuration/set-up-game-configuration.component";
 import { GameComponent } from './game/game.component';
 import { ResultsComponent } from './results/results.component';
@@ -16,7 +16,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, SetUpGameConfigurationComponent, GameComponent, ResultsComponent],
+  declarations: [AppComponent, SetUpGameConfigurationComponent, GameComponent, ResultsComponent],
   imports: [BrowserModule, FormsModule, RouterModule.forRoot(routes)],
   providers: [],
   bootstrap: [AppComponent],

@@ -1,4 +1,4 @@
-<div *ngIf="!authLoading && !configLoading">
+<!-- <div *ngIf="!authLoading && !configLoading">
   Genre:
   <select
     [(ngModel)]="selectedGenre"
@@ -34,7 +34,7 @@
   <input type="number" [(ngModel)]="numChoices" min="2" max="10">
 </div>
 
-<!-- Display questions -->
+
 <div *ngIf="questions.length > 0">
   <h3>Questions</h3>
   <div *ngFor="let question of questions; let i = index">
@@ -50,7 +50,7 @@
   </div>
 </div>
 
-<!-- Display tracks -->
+
 <div *ngIf="tracks.length > 0">
   <h3>Tracks</h3>
   <ul>
@@ -59,4 +59,4 @@
       <a href="{{ track.preview_url }}" target="_blank">Preview</a>
     </li>
   </ul>
-</div>
+</div> -->

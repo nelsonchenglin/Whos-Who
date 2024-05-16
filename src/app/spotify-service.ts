@@ -24,21 +24,44 @@ export class SpotifyService {
         this.token = token;
     }
 
+    private async fetchWithRetry(endpoint: string, options: any, retries = 5, backoff = 500): Promise<any> {
+        console.log(`Fetching with retry: endpoint=${endpoint}, options=${JSON.stringify(options)}`);
+        for (let i = 0; i < retries; i++) {
+            try {
+                const response = await fetchFromSpotify({
+                    token: this.token,
+                    endpoint: endpoint,
+                    params: options.params
+                });
+                console.log(`Fetch successful: ${JSON.stringify(response)}`);
+                return response;
+            } catch (err: any) {
+                console.error(`Fetch failed (attempt ${i + 1}): ${err.message}`);
+                if (err.status === 429) { // rate limit error
+                    console.log(`Rate limit error, retrying in ${backoff * Math.pow(2, i)} ms`);
+                    await new Promise(res => setTimeout(res, backoff * Math.pow(2, i))); // exponential backoff
+                } else {
+                    throw err;
+                }
+            }
+        }
+        throw new Error('Max retries reached');
+    }
+
     async loadGenres(): Promise<Genre[]> {
-        const response = await fetchFromSpotify({
-            token: this.token,
-            endpoint: 'recommendations/available-genre-seeds',
+        console.log('Loading genres...');
+        const response = await this.fetchWithRetry('browse/categories', {
+            params: { limit: 50 }
         });
-        return response.genres.map((genre: string) => ({
-            id: genre,
-            name: genre.charAt(0).toUpperCase() + genre.slice(1),
+        console.log('Genres loaded:', response);
+        return response.categories.items.map((category: any) => ({
+            id: category.id,
+            name: category.name
         }));
     }
 
     async searchPlaylistsByGenre(genre: string): Promise<any[]> {
-        const response = await fetchFromSpotify({
-            token: this.token,
-            endpoint: "search",
+        const response = await this.fetchWithRetry('search', {
             params: {
                 q: genre,
                 type: "playlist",
@@ -49,9 +72,7 @@ export class SpotifyService {
     }
 
     async fetchTracksFromPlaylist(playlistId: string): Promise<Track[]> {
-        const response = await fetchFromSpotify({
-            token: this.token,
-            endpoint: `playlists/${playlistId}/tracks`,
+        const response = await this.fetchWithRetry(`playlists/${playlistId}/tracks`, {
             params: { limit: 50 }
         });
         return response.items.map((item: any) => ({

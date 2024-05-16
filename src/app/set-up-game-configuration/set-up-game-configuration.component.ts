@@ -72,7 +72,7 @@ export class SetUpGameConfigurationComponent implements OnInit {
     const settings = {
       searchType: this.searchType,
       searchQuery: this.searchQuery,
-      selectedGenre: this.selectedGenre,
+      selectedGenre: this.genres.find(genre => genre.id === this.selectedGenre)?.name || '', // Get the genre name
       numChoices: this.numChoices,
       numQuestions: this.numQuestions
     };

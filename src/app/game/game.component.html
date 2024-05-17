@@ -1,7 +1,7 @@
 <div class="main-container">
   <div class="game-container">
     <div *ngIf="questions.length > 0 && currentQuestionIndex < numQuestions">
-      <h3>Question {{ currentQuestionIndex + 1 }}</h3>
+      <h2>Question {{ currentQuestionIndex + 1 }}</h2>
 
       <!-- Display the album name if searchType is 'album' -->
       <p *ngIf="searchType === 'album'">Album: {{ searchQuery }}</p>
@@ -23,13 +23,13 @@
       </ul>
       <button
         *ngIf="currentQuestionIndex < numQuestions - 1"
-        (click)="currentQuestionIndex = currentQuestionIndex + 1"
+        (click)="nextQuestion()"
       >
         Next Question
       </button>
       <button
         *ngIf="currentQuestionIndex >= numQuestions - 1"
-        (click)="selectAnswer('')"
+        (click)="submitQuiz()"
       >
         Submit
       </button>

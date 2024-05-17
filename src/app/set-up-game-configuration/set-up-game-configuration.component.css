@@ -1,80 +1,104 @@
-.config-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.main-container {
   width: 100vw;
-  background-color: #282c34;
-  height: 100vh;
+  height: 110vh;
+  background: midnightblue;
+  margin-top: 0;
+}
+
+.config-container {
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+  width: 60%;
+  padding-top: 5%;
+  color: white;
   text-shadow: 0 0 5px rgba(255, 255, 255, 0.4);
-  color: #87ceeb;
 }
 
-.aligned-box {
-  width: 35vw;
-  border: 2px solid white;
-  border-radius: 10px;
-  animation: glow 2s infinite alternate;
-  height: 45vh;
-  justify-content: center;
-  margin-top: 45px;
-}
-
-.aligned-box h2 {
-  width: 100%;
+h1 {
   text-align: center;
+  margin-top: 0;
+  margin-bottom: 20px;
 }
 
-.config-field {
+.instructions {
+  margin-bottom: 20px;
+  font-size: 1em;
+}
+
+.instructions p,
+.instructions ol,
+.instructions ul {
+  margin-bottom: 10px;
+}
+
+.instructions ol,
+.instructions ul {
+  padding-left: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+input[type="text"],
+select,
+input[type="number"] {
   width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: end;
-  margin-top: 20px;
-}
-
-.config-field label {
-  flex: 1;
-  text-align: left;
-  padding-left: 5%;
-}
-
-.input-field {
-  width: 25%;
+  padding: 8px;
   box-sizing: border-box;
-  margin-right: 5%;
 }
 
-.button-container {
+button {
+  display: block;
   width: 100%;
-  text-align: center;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 1em;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.leaderboard {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 1em;
+  border-radius: 5px;
   margin-top: 10px;
 }
 
-#start-button {
-  text-align: center;
-  justify-content: center;
-  width: 50%;
-  cursor: pointer;
-  margin-top: 25px;
-  margin-bottom: 15px;
-  height: 30px;
-  text-shadow: 0 0 5px rgba(255, 255, 255, 0.4);
-  background: black;
-  font-size: 16px;
-  color: #87ceeb;
+.leaderboard:hover {
+  background-color: #0056b3;
 }
 
-@keyframes glow {
-  0% {
-    box-shadow: 0 0 10px rgba(0, 255, 255, 0.5), 0 0 20px rgba(0, 255, 255, 0.5),
-      0 0 20px rgba(0, 255, 255, 0.5), 0 0 40px rgba(0, 255, 255, 0.5),
-      0 0 60px rgba(0, 255, 255, 0.5), 0 0 80px rgba(0, 255, 255, 0.5),
-      0 0 90px rgba(0, 255, 255, 0.5), 0 0 150px rgba(0, 255, 255, 0.5);
-  }
-  100% {
-    box-shadow: 0 0 15px rgba(0, 255, 255, 0.9), 0 0 30px rgba(0, 255, 255, 0.9),
-      0 0 35px rgba(0, 255, 255, 0.9), 0 0 60px rgba(0, 255, 255, 0.9),
-      0 0 80px rgba(0, 255, 255, 0.9), 0 0 100px rgba(0, 255, 255, 0.9),
-      0 0 110px rgba(0, 255, 255, 0.9), 0 0 180px rgba(0, 255, 255, 0.9);
-  }
+.light {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 100%;
+  height: 110%;
+  background: radial-gradient(
+    ellipse at top,
+    rgba(255, 255, 255, 0.3) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: translateX(-50%);
+  pointer-events: none;
+  overflow-y: hidden;
 }

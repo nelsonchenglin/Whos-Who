@@ -1,12 +1,39 @@
-<div class="config-container">
-  <div class="home-text">
-    <h1>Who's Who - Music Guessing Game!</h1>
-  </div>
-  <div class="aligned-box">
-    <h2>Select Game Configurations</h2>
-    <div class="config-field" *ngIf="genres.length > 0">
-      <label for="genre">Genre:</label>
-      <select id="genre" class="input-field" [(ngModel)]="selectedGenre">
+<div class="main-container">
+  <div class="light"></div>
+  <div class="config-container">
+    <h1>Welcome to Music Trivia!</h1>
+
+    <div class="instructions">
+      <p>For Music Trivia, you have two choices:</p>
+      <ol>
+        <li>
+          You can choose a genre above and then for each question a song will
+          play. Your challenge is to guess the correct name of the song for the
+          music snippet.
+        </li>
+        <li>
+          You can choose the album challenge. Enter in the Album search query
+          the name of the album you want to try. There will be no sound for
+          this; rather for the album you pick, for each question there will be 1
+          song from that album you have to identify amongst other answer choices
+          that will consist of songs not from that album.
+        </li>
+      </ol>
+      <p>Option Settings:</p>
+      <ul>
+        <li>
+          You can modify the difficulty by choosing how many possible answer
+          choices you want to play with. You can choose from 2-5.
+        </li>
+        <li>You can choose how many questions you want, anywhere from 2-8.</li>
+      </ul>
+    </div>
+
+    <div class="form-group">
+      <label for="genre"
+        >Genre: Choose Your Genre Type If You Are Playing Genre Game</label
+      >
+      <select id="genre" [(ngModel)]="selectedGenre">
         <option value=""></option>
         <option *ngFor="let genre of genres" [value]="genre.id">
           {{ genre.name }}
@@ -14,50 +41,46 @@
       </select>
     </div>
 
-    <div class="config-field">
+    <div class="form-group">
       <label for="searchType">Search Type:</label>
-      <select id="searchType" class="input-field" [(ngModel)]="searchType">
+      <select id="searchType" [(ngModel)]="searchType">
         <option value="genre">Genre</option>
-        <option value="artist">Artist</option>
         <option value="album">Album</option>
       </select>
     </div>
 
-    <div class="config-field">
-      <label for="searchQuery">Search Query:</label>
-      <input
-        id="searchQuery"
-        class="input-field"
-        type="text"
-        [(ngModel)]="searchQuery"
-      />
+    <div class="form-group">
+      <label for="searchQuery"
+        >Album Search Query(Leave Blank if Playing Genre Game):</label
+      >
+      <input id="searchQuery" type="text" [(ngModel)]="searchQuery" />
     </div>
 
-    <div class="config-field">
+    <div class="form-group">
       <label for="numChoices">Number of Choices per Question:</label>
       <input
-        class="input-field"
         id="numChoices"
         type="number"
         [(ngModel)]="numChoices"
         min="2"
-        max="10"
+        max="5"
       />
     </div>
 
-    <div class="config-field">
+    <div class="form-group">
       <label for="numQuestions">Number of Questions:</label>
       <input
-        class="input-field"
         id="numQuestions"
         type="number"
         [(ngModel)]="numQuestions"
         min="2"
-        max="10"
+        max="8"
       />
     </div>
-    <div class="button-container">
-      <button id="start-button" (click)="startGame()">Start Game</button>
-    </div>
+
+    <button (click)="startGame()">Start Game</button>
+    <button class="leaderboard" (click)="Leaderboard()">
+      View Leaderboard
+    </button>
   </div>
 </div>

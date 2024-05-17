@@ -1,29 +1,37 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
 
 interface LeaderboardEntry {
   name: string;
   score: number;
   percentage: number;
+  gameType: string;
 }
 
 @Component({
-  selector: 'app-results',
-  templateUrl: './results.component.html',
-  styleUrls: ['./results.component.css']
+  selector: "app-results",
+  templateUrl: "./results.component.html",
+  styleUrls: ["./results.component.css"],
 })
 export class ResultsComponent implements OnInit {
   score: number = 0;
   numQuestions: number = 0;
-  resultMessage: string = '';
+  resultMessage: string = "";
   leaderboard: LeaderboardEntry[] = [];
+  gameType: string = "";
+  gameEnded: boolean = false;
 
   constructor(private router: Router) {
     const navigation = this.router.getCurrentNavigation();
-    const state = navigation?.extras.state as { score: number, numQuestions: number };
+    const state = navigation?.extras.state as {
+      score: number;
+      numQuestions: number;
+      gameType: string;
+    };
     if (state) {
       this.score = state.score;
       this.numQuestions = state.numQuestions;
+      this.gameType = state.gameType;
     }
   }
 
@@ -35,16 +43,19 @@ export class ResultsComponent implements OnInit {
 
   calculateResult(): void {
     const percentage = (this.score / this.numQuestions) * 100;
-    this.resultMessage = percentage >= 70 ? 'You Win!' : 'You Lose!';
+    this.resultMessage = percentage >= 70 ? "You Win!" : "You Lose!";
   }
 
   updateLeaderboard(): void {
     const playerName = prompt("Enter your name:");
     const percentage = (this.score / this.numQuestions) * 100;
+    const percentageCheck =
+      percentage == null ? 0 : parseFloat(percentage.toFixed(2));
     const newEntry: LeaderboardEntry = {
-      name: playerName || 'Anonymous',
+      name: playerName || "Anonymous",
       score: this.score,
-      percentage: percentage
+      percentage: percentageCheck,
+      gameType: this.gameType,
     };
 
     this.leaderboard.push(newEntry);
@@ -53,19 +64,23 @@ export class ResultsComponent implements OnInit {
   }
 
   saveLeaderboard(): void {
-    localStorage.setItem('leaderboard', JSON.stringify(this.leaderboard));
-    console.log('Leaderboard saved:', this.leaderboard);  // Debugging log
+    localStorage.setItem("leaderboard", JSON.stringify(this.leaderboard));
   }
 
   loadLeaderboard(): void {
-    const storedLeaderboard = localStorage.getItem('leaderboard');
+    const storedLeaderboard = localStorage.getItem("leaderboard");
     if (storedLeaderboard) {
       this.leaderboard = JSON.parse(storedLeaderboard);
     }
-    console.log('Loaded leaderboard:', this.leaderboard);  // Debugging log
   }
 
   restart() {
-    this.router.navigate(['/']);
+    this.router.navigate(["/"]);
+  }
+
+  end() {
+    this.gameEnded = true;
+    this.resultMessage = "Thank you for playing!";
+    localStorage.removeItem("scores");
   }
 }

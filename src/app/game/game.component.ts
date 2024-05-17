@@ -1,9 +1,7 @@
-
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { request } from 'src/services/api';
-import { SpotifyService } from '../spotify-service';
-
+import { Component, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
+import { request } from "src/services/api";
+import { SpotifyService } from "../spotify-service";
 
 interface Track {
   id: string;
@@ -50,17 +48,14 @@ export class GameComponent implements OnInit {
 
   selectedAnswer: string = "";
 
-
   constructor(private router: Router, private spotifyService: SpotifyService) {
     const navigation = this.router.getCurrentNavigation();
     const state = navigation?.extras.state as {
-
-      searchType: string,
-      searchQuery: string,
-      selectedGenre: string,
-      numChoices: number,
-      numQuestions: number
-
+      searchType: string;
+      searchQuery: string;
+      selectedGenre: string;
+      numChoices: number;
+      numQuestions: number;
     };
     this.searchType = state.searchType;
     this.searchQuery = state.searchQuery;
@@ -110,7 +105,6 @@ export class GameComponent implements OnInit {
 
       console.log("Fetched playlists:", playlists);
 
-
       if (playlists.length === 0) {
         throw new Error("No playlists found");
       }
@@ -139,8 +133,7 @@ export class GameComponent implements OnInit {
     try {
       this.tracks = await this.fetchTracks(this.selectedGenre); // Pass selectedGenre to fetchTracks
 
-      console.log('Fetched tracks:', this.tracks);
-
+      console.log("Fetched tracks:", this.tracks);
 
       if (this.tracks.length < this.numQuestions) {
         console.error(
@@ -162,7 +155,7 @@ export class GameComponent implements OnInit {
         }));
 
         this.questions.push({
-          text: "Which track is playing?",
+          text: "Which track is playing",
           options,
           correctAnswer: correctTrack.name,
           preview: correctTrack.preview_url,
@@ -189,12 +182,10 @@ export class GameComponent implements OnInit {
       );
       console.log("Fetched album tracks:", albumTracks);
 
-
       if (!albumTracks || albumTracks.length === 0) {
         console.error("No tracks found for the specified album.");
         return;
       }
-
 
       const incorrectTracks = await this.spotifyService.fetchIncorrectTracks(
         this.numChoices * this.numQuestions
@@ -213,7 +204,6 @@ export class GameComponent implements OnInit {
       // Shuffle albumTracks to ensure randomness
       const shuffledAlbumTracks = this.spotifyService.shuffleArray(albumTracks);
       console.log("Shuffled album tracks:", shuffledAlbumTracks);
-
 
       this.questions = [];
       for (let i = 0; i < this.numQuestions; i++) {
@@ -236,16 +226,14 @@ export class GameComponent implements OnInit {
 
         // Create options
         const options: Option[] = randomIncorrectTracks.map((track) => ({
-
           name: track.name,
           img: "", // Adjust this if you want to display album images
         }));
-  
+
         options.push({
           name: correctTrack.name,
           img: "", // Adjust this if you want to display album images
         });
-
 
         // Shuffle options to randomize the position of the correct answer
         const shuffledOptions = this.spotifyService.shuffleArray(options);
@@ -256,7 +244,6 @@ export class GameComponent implements OnInit {
           options: shuffledOptions,
 
           correctAnswer: correctTrack.name,
-
         });
         console.log(`Question ${i + 1}:`, this.questions[i]);
       }
@@ -265,8 +252,6 @@ export class GameComponent implements OnInit {
     }
     this.searchQuery = this.splitAlbumNameAndArtist(this.searchQuery)[0];
   }
-  
-  
 
   playSnippet(previewUrl?: string) {
     if (!previewUrl) {
@@ -350,6 +335,5 @@ export class GameComponent implements OnInit {
         gameType: this.searchType,
       },
     });
-
   }
 }

@@ -9,31 +9,30 @@
   </select>
 </div>
 
-<div>
-  <select [(ngModel)]="searchType">
-    <option value="genre">Genre</option>
-    <option value="artist">Artist</option>
-    <option value="album">Album</option>
-  </select>
-  <input
-    type="text"
-    [(ngModel)]="searchQuery"
-    placeholder="Enter search query"
-  />
-  <button (click)="performSearch()">Search</button>
-  <button (click)="performGenreSearch(searchQuery)">Search by Genre</button>
-</div>
+  <div>
+    <select [(ngModel)]="searchType">
+      <option value="genre">Genre</option>
+      <option value="artist">Artist</option>
+      <option value="album">Album</option>
+    </select>
+    <input
+      type="text"
+      [(ngModel)]="searchQuery"
+      placeholder="Enter search query"
+    />
+    <button (click)="performSearch()">Search</button>
+    <button (click)="performGenreSearch(searchQuery)">Search by Genre</button>
+  </div>
 
-<div>
-  Number of Questions: 
-  <input type="number" [(ngModel)]="numQuestions" min="1" max="10">
-</div>
+  <div>
+    Number of Questions:
+    <input type="number" [(ngModel)]="numQuestions" min="1" max="10" />
+  </div>
 
-<div>
-  Number of Choices per Question: 
-  <input type="number" [(ngModel)]="numChoices" min="2" max="10">
-</div>
-
+  <div>
+    Number of Choices per Question:
+    <input type="number" [(ngModel)]="numChoices" min="2" max="10" />
+  </div>
 
 <div *ngIf="questions.length > 0">
   <h3>Questions</h3>
@@ -42,9 +41,9 @@
     <button (click)="playSnippet(question.preview)">Play Snippet</button>
     <button (click)="pauseSnippet()">Pause Snippet</button>
     <ul>
-      <li *ngFor="let option of question.options">
-        {{ option.name }}
-        <img [src]="option.img" alt="{{ option.name }}" width="50">
+      <li *ngFor="let track of tracks">
+        {{ track.name }} -
+        <a href="{{ track.preview_url }}" target="_blank">Preview</a>
       </li>
     </ul>
   </div>

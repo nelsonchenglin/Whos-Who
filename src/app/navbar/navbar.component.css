@@ -1,0 +1,23 @@
+.navbar-container {
+  background-color: #282c34;
+  width: 100vw;
+  height: 45px;
+}
+
+.navbar {
+  display: flex;
+  justify-content: left;
+  list-style: none;
+  width: 50%;
+  margin-top: 0;
+  height: 100%;
+  align-items: center;
+}
+
+a {
+  color: white;
+}
+
+li {
+  width: 15%;
+}

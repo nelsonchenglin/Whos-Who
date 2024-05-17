@@ -1,22 +1,59 @@
-<div *ngIf="questions.length > 0 && currentQuestionIndex < numQuestions">
-  <h3>Question {{ currentQuestionIndex + 1 }}</h3>
+<div class="main-container">
+  <h1>Answer the questions!</h1>
+  <div class="border-game">
+    <div class="game-container">
+      <div *ngIf="questions.length > 0 && currentQuestionIndex < numQuestions">
+        <h2>Question {{ currentQuestionIndex + 1 }}</h2>
 
-  <!-- Display the album name if searchType is 'album' -->
-  <p *ngIf="searchType === 'album'">Album: {{ searchQuery }}</p>
+        <!-- Display the album name if searchType is 'album' -->
+        <p *ngIf="searchType === 'album'">Album: {{ searchQuery }}</p>
 
-  <p>{{ questions[currentQuestionIndex].text }}</p>
+        <p>
+          {{
+            splitAlbumNameAndArtist(questions[currentQuestionIndex].text)[0]
+          }}?
+        </p>
 
-  <!-- Conditionally show play/pause buttons for questions with a preview field -->
-  <div *ngIf="questions[currentQuestionIndex].preview">
-    <button (click)="playSnippet(questions[currentQuestionIndex].preview)">Play Snippet</button>
-    <button (click)="pauseSnippet()">Pause Snippet</button>
+        <!-- Conditionally show play/pause buttons for questions with a preview field -->
+        <div *ngIf="questions[currentQuestionIndex].preview">
+          <button
+            (click)="playSnippet(questions[currentQuestionIndex].preview)"
+          >
+            Play Snippet
+          </button>
+          <button (click)="pauseSnippet()">Pause Snippet</button>
+        </div>
+
+        <ul>
+          <li *ngFor="let option of questions[currentQuestionIndex].options">
+            <button (click)="selectAnswer(option.name)">
+              {{ option.name }}
+            </button>
+          </li>
+        </ul>
+        <div class="next-or-submit-container">
+          <button
+            class="next-or-submit"
+            *ngIf="currentQuestionIndex < numQuestions - 1"
+            (click)="nextQuestion()"
+          >
+            Next Question
+          </button>
+          <button
+            class="next-or-submit"
+            *ngIf="currentQuestionIndex >= numQuestions - 1"
+            (click)="submitQuiz()"
+          >
+            Submit
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="lines">
+    <div class="line"></div>
+    <div class="line"></div>
+    <div class="line"></div>
   </div>
 
-  <ul>
-    <li *ngFor="let option of questions[currentQuestionIndex].options">
-      <button (click)="selectAnswer(option.name)">{{ option.name }}</button>
-    </li>
-  </ul>
-  <button *ngIf="currentQuestionIndex < numQuestions - 1" (click)="nextQuestion()">Next Question</button>
-  <button *ngIf="currentQuestionIndex >= numQuestions - 1" (click)="submitQuiz()">Submit</button>
 </div>

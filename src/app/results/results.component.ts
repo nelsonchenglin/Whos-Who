@@ -18,6 +18,7 @@ export class ResultsComponent implements OnInit {
   numQuestions: number = 0;
   resultMessage: string = "";
   leaderboard: LeaderboardEntry[] = [];
+
   gameType: string = "";
   gameEnded: boolean = false;
 
@@ -28,6 +29,7 @@ export class ResultsComponent implements OnInit {
       numQuestions: number;
       gameType: string;
     };
+
     if (state) {
       this.score = state.score;
       this.numQuestions = state.numQuestions;
@@ -54,8 +56,10 @@ export class ResultsComponent implements OnInit {
     const newEntry: LeaderboardEntry = {
       name: playerName || "Anonymous",
       score: this.score,
+
       percentage: percentageCheck,
       gameType: this.gameType,
+
     };
 
     this.leaderboard.push(newEntry);

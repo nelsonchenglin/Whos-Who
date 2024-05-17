@@ -18,12 +18,14 @@ const routes: Routes = [
 ];
 
 @NgModule({
+
   declarations: [
     AppComponent,
     SetUpGameConfigurationComponent,
     GameComponent,
     ResultsComponent,
   ],
+
   imports: [BrowserModule, FormsModule, RouterModule.forRoot(routes)],
   providers: [],
   bootstrap: [AppComponent],

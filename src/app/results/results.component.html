@@ -1,9 +1,12 @@
+
 <div *ngIf="!gameEnded">
+
   <h3>Results</h3>
   <p>Your score: {{ score }} out of {{ numQuestions }}</p>
   <p>{{ resultMessage }}</p>
   <button class="restart" (click)="restart()">Restart Game</button>
   <button class="end" (click)="end()">End Game</button>
+
 
   <div>
     <h3>Leaderboard</h3>
@@ -31,3 +34,4 @@
 <div class="gameEnded" *ngIf="gameEnded">
   <h3>{{ resultMessage }}</h3>
 </div>
+

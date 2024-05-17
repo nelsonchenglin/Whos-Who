@@ -56,6 +56,7 @@ export class SpotifyService {
           throw err;
         }
       }
+
     }
     throw new Error("Max retries reached");
   }
@@ -82,6 +83,7 @@ export class SpotifyService {
     });
     return response.playlists.items;
   }
+
 
   async fetchTracksFromPlaylist(playlistId: string): Promise<Track[]> {
     const response = await this.fetchWithRetry(
@@ -234,3 +236,4 @@ export class SpotifyService {
     return array;
   }
 }
+

@@ -1,12 +1,73 @@
 .main-container {
   height: 100vh;
   width: 100vw;
+  background-image: url("../../quizbg.jpeg");
+  background-size: auto;
+  text-align: center;
+  color: white;
 }
 
-.game-container {
+h1 {
+  padding-top: 10vh;
+  padding-bottom: 5vh;
+  margin-top: 0;
+}
+
+.border-game {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-content: center;
   align-items: center;
+  width: 100%;
+}
+
+.game-container {
+  width: 40%;
+  border: 2px solid #00ffff; /* Neon blue color */
+  border-radius: 5px; /* Optional: Add border radius for rounded corners */
+  box-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 40px #00ffff; /* Neon glow effect */
+  background-color: #404040;
+}
+
+.game-container p {
+  font-size: 20px;
+}
+
+button {
+  margin-top: 20px;
+  font-size: 14px;
+  height: 26px;
+  border-radius: 5px;
+  border: 1px solid black;
+}
+
+h1,
+h2,
+p {
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+ul {
+  text-align: start;
+}
+
+.next-or-submit-container {
+  margin-bottom: 10%;
+}
+
+.next-or-submit:hover {
+  background-color: lightgray;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+  border-radius: 5px;
+}
+
+li button:focus {
+  border: 2px solid #45a049;
+  box-shadow: 0 0 10px #45a049, 0 0 20px #45a049; /* Neon glow effect */
+  border-radius: 10px;
+}
+
+button:hover {
+  cursor: pointer;
 }

@@ -164,6 +164,12 @@ export class GameComponent implements OnInit {
     }
   }
 
+  splitAlbumNameAndArtist(albumName: string) {
+    const regex = /^\s*-\s*|\s*-\s*|\s*-\s*$/;
+    const [album, artist] = albumName.split(regex);
+    return [album, artist];
+  }
+
   async createAlbumQuestions() {
     try {
       console.log(`Searching for tracks in album: ${this.searchQuery}`);
@@ -238,6 +244,7 @@ export class GameComponent implements OnInit {
     } catch (error) {
       console.error("Failed to create album questions:", error);
     }
+    this.searchQuery = this.splitAlbumNameAndArtist(this.searchQuery)[0];
   }
 
   playSnippet(previewUrl?: string) {

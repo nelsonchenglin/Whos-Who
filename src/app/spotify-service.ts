@@ -139,9 +139,15 @@ export class SpotifyService {
     return tracks;
   }
 
+  splitAlbumNameAndArtist(albumName: string) {
+    const regex = /^\s*-\s*|\s*-\s*|\s*-\s*$/;
+    const [album, artist] = albumName.split(regex);
+    return [album, artist];
+  }
+
   async searchByAlbumName(albumName: string): Promise<Track[]> {
     console.log(`Searching for album: ${albumName}`); // Log the album search query
-    const albumDeets = albumName.split(" - ");
+    const albumDeets = this.splitAlbumNameAndArtist(albumName);
     const albName = albumDeets[0];
     const artist = albumDeets[1];
 
